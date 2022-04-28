@@ -59,6 +59,22 @@ class settings {
 			'segment_keys_section'
 		);
 */
+
+		add_settings_field(
+			'segment_google_enabled',
+			__( 'Enable Local gTag', 'segment' ),
+			array( $this, 'render_segment_ga4_enable_field' ),
+			'segment_keys',
+			'segment_keys_section'
+		);
+
+		add_settings_field(
+			'segment_google_measurement_id',
+			__( 'GA4 Measurement ID', 'segment' ),
+			array( $this, 'render_segment_ga4_measurment_field' ),
+			'segment_keys',
+			'segment_keys_section'
+		);
 	}
 
 	public function page_layout() {
@@ -109,6 +125,40 @@ class settings {
 		echo '<input type="text" name="segment_keys[segment_custom_domain]" class="regular-text segment_custom_domain_field" placeholder="' . esc_attr__( '', 'segment' ) . '" value="' . esc_attr( $value ) . '">';
 		echo '<p class="description">' . __( 'Contact friends@segment to configure your custom Segment subdomain', 'segment' ) . '</p>';
 
+	}
+
+	function render_segment_ga4_enable_field() {
+
+		// Retrieve data from the database.
+		$options = get_option( 'segment_keys' );
+		$value = ( isset( $options['segment_google_enabled'] ) && $options['segment_google_enabled'] === 'true' ) ? true : false;
+
+		// Field output.
+		echo "<fieldset>";
+		$checked = !$value ? 'checked' : '' ;
+		echo "<label for=\"segment_google_enabled-0\"><input type=\"radio\" name=\"segment_option_name[segment_google_enabled]\" id=\"segment_google_enabled-0\" value=\"false\" " . $checked . "> No</label><br>";
+		$checked = $value ? 'checked' : '' ;
+		echo "<label for=\"segment_google_enabled-1\"><input type=\"radio\" name=\"segment_option_name[segment_google_enabled]\" id=\"segment_google_enabled-1\" value=\"true\" " . $checked . "> Yes</label></fieldset>" . PHP_EOL;
+	
+	}
+
+	function render_segment_ga4_measurment_field() {
+
+		// Retrieve data from the database.
+		$options = get_option( 'segment_keys' );
+
+		// Set default value.
+		$value = isset( $options['segment_google_measurement_id'] ) ? strtoupper($options['segment_google_measurement_id']) : '';
+
+		// Field output.
+		echo '<input type="text" name="segment_keys[segment_google_measurement_id]" class="regular-text segment_google_measurement_id_field" placeholder="' . esc_attr__( '', 'segment' ) . '" value="' . esc_attr( $value ) . '">';
+		echo '<p class="description">' . __( 'Measurement ID to add GA4 to site natively', 'segment' ) . '</p>';
+		echo "<script>" . PHP_EOL;
+		echo "jQuery(document).ready(function() {";
+		echo "    var enabled = jQuery('input[name=\"segment_option_name[segment_google_enabled]\"]:checked').val();";
+		echo "    jQuery('input[name=\"segment_keys[segment_google_measurement_id]\"]).prop('disabled', !enabled);";
+		echo "});" . PHP_EOL;
+		echo "</script>" . PHP_EOL;
 	}
 
 	function render_segment_enabled_modules() {

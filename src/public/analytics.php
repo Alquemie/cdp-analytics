@@ -27,7 +27,22 @@ class analytics {
             echo 'analytics.load("' . $writeKey . '");';
             echo "analytics.page();";
             echo "}}();";
-            echo "</script>";
+            echo "</script>" . PHP_EOL;
+        }
+
+        if ( isset( $segment['segment_google_measurement_id'] ) ) {
+            $measurementId = strtoupper($segment['segment_google_measurement_id']);
+            if ( substr($measurementId,0,2) == "G-" ) {
+                echo "<!-- Global site tag (gtag.js) - Google Analytics -->";
+                echo "<script async src=\"https://www.googletagmanager.com/gtag/js?id=" . $measurementId . "\"></script>";
+                echo "<script>";
+                echo "  window.dataLayer = window.dataLayer || [];";
+                echo "  function gtag(){dataLayer.push(arguments);}";
+                echo "  gtag('js', new Date());";
+
+                echo "  gtag('config', '" . $measurementId . "');";
+                echo "</script>" . PHP_EOL;
+            }
         }
     }
 
