@@ -30,7 +30,7 @@ class analytics {
             echo "</script>" . PHP_EOL;
         }
 
-        if ( isset( $segment['segment_google_measurement_id'] ) ) {
+        if ( isset( $segment['segment_google_measurement_id'] ) && isset( $segment['segment_google_enabled'] ) && $segment['segment_google_enabled'] == "Y" ) {
             $measurementId = strtoupper($segment['segment_google_measurement_id']);
             if ( substr($measurementId,0,2) == "G-" ) {
                 echo "<!-- Global site tag (gtag.js) - Google Analytics -->";
@@ -42,6 +42,8 @@ class analytics {
 
                 echo "  gtag('config', '" . $measurementId . "');";
                 echo "</script>" . PHP_EOL;
+            } else {
+                echo "<!-- Global site tag (gtag.js) - INVALID MEASUREMENT ID -->";
             }
         }
     }

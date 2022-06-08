@@ -10,7 +10,7 @@
  * Plugin Name: Segment WP Connection
  * Plugin URI:  https://github.com/chriscarrel/twilio-segment-wp/
  * Description: WordPress implementation of Segment analytics.js source with basic support for Gravity Forms.
- * Version:     1.1.6
+ * Version:     1.1.11
  * Author:      Chris Carrel
  * Author URI:  https://segment.com
  * Text Domain: segment

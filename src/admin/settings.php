@@ -131,14 +131,15 @@ class settings {
 
 		// Retrieve data from the database.
 		$options = get_option( 'segment_keys' );
-		$value = ( isset( $options['segment_google_enabled'] ) && $options['segment_google_enabled'] === 'true' ) ? true : false;
-
+		$yesVal = ( isset( $options['segment_google_enabled'] ) && $options['segment_google_enabled'] == "Y" ) ? true : false;
+		$noVal = !$yesVal;
+		
 		// Field output.
 		echo "<fieldset>";
-		$checked = !$value ? 'checked' : '' ;
-		echo "<label for=\"segment_google_enabled-0\"><input type=\"radio\" name=\"segment_option_name[segment_google_enabled]\" id=\"segment_google_enabled-0\" value=\"false\" " . $checked . "> No</label><br>";
+		$checked = !$value ? 'checked="true"' : '' ;
+		echo "<label for=\"segment_google_enabled-0\"><input type=\"radio\" name=\"segment_option_name[segment_google_enabled]\" id=\"segment_google_enabled-0\" value=\"N\" " . $checked . " onClick=\"toggleGAfield();\"> No</label><br>";
 		$checked = $value ? 'checked' : '' ;
-		echo "<label for=\"segment_google_enabled-1\"><input type=\"radio\" name=\"segment_option_name[segment_google_enabled]\" id=\"segment_google_enabled-1\" value=\"true\" " . $checked . "> Yes</label></fieldset>" . PHP_EOL;
+		echo "<label for=\"segment_google_enabled-1\"><input type=\"radio\" name=\"segment_option_name[segment_google_enabled]\" id=\"segment_google_enabled-1\" value=\"Y\" " . $checked . " onClick=\"toggleGAfield();\"> Yes</label></fieldset>" . PHP_EOL;
 	
 	}
 
@@ -155,9 +156,12 @@ class settings {
 		echo '<p class="description">' . __( 'Measurement ID to add GA4 to site natively', 'segment' ) . '</p>';
 		echo "<script>" . PHP_EOL;
 		echo "jQuery(document).ready(function() {";
-		echo "    var enabled = jQuery('input[name=\"segment_option_name[segment_google_enabled]\"]:checked').val();";
-		echo "    jQuery('input[name=\"segment_keys[segment_google_measurement_id]\"]).prop('disabled', !enabled);";
+			echo "   toggleGAfield(); ";
 		echo "});" . PHP_EOL;
+		echo "function toggleGAfield() {";
+		echo "    var enabled = (jQuery('input[name=\"segment_option_name[segment_google_enabled]\"]:checked').val() == \"true\");";
+		echo "    jQuery('input[name=\"segment_keys[segment_google_measurement_id]\"]').prop('disabled', !enabled);";	
+		echo "}" . PHP_EOL;
 		echo "</script>" . PHP_EOL;
 	}
 

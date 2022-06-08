@@ -16,7 +16,7 @@ class forms {
 	public function __construct() {
 
         if ( class_exists( 'GFForms' ) ) {
-            add_action('wp_footer', array($this, 'trackGF'));
+            add_action( 'wp_footer', array($this, 'trackGF'));
             add_action( 'gform_after_submission', array($this, 'after_submission'), 10, 2 );
             add_filter( 'gform_validation_message', array($this, 'track_error'), 10, 2 );
         }
