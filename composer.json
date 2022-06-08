@@ -1,12 +1,12 @@
 {
-	"name": "segmentio/twilio-segment-wp",
+	"name": "chriscarrel/twilio-segment",
 	"description": "WordPress implementation of Segment analytics.js source with basic support for Gravity Forms.",
 	"type": "wordpress-plugin",
 	"license": "GPL-3.0-or-later",
 	"homepage": "https://segment.com/",
 	"support": {
-		"issues": "https://github.com/segmentio/twilio-segment-wp/issues",
-		"source": "https://github.com/segmentio/twilio-segment-wp"
+		"issues": "https://github.com/chriscarrel/twilio-segment/issues",
+		"source": "https://github.com/chriscarrel/twilio-segment"
 	},
 	"minimum-stability": "dev",
 	"prefer-stable": true,
