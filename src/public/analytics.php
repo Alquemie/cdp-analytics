@@ -2,14 +2,14 @@
 /**
  * REQUIRED: Segment analytics.js
  *
- * @package     Twilio\Segment
+ * @package     Alquemie\Twilio\Segment
  * @since       1.0.0
  * @author      Chris Carrel
  * @link        https://segment.com
  * @license     GNU-2.0+
  */
 
-namespace Twilio\Segment;
+namespace Alquemie\Twilio\Segment;
 
 class analytics {
 
@@ -27,23 +27,52 @@ class analytics {
             echo 'analytics.load("' . $writeKey . '");';
             echo "analytics.page();";
             echo "}}();";
-            echo "</script>" . PHP_EOL;
+            echo "</script>" ;
         }
 
         if ( isset( $segment['segment_google_measurement_id'] ) && isset( $segment['segment_google_enabled'] ) && $segment['segment_google_enabled'] == "Y" ) {
             $measurementId = strtoupper($segment['segment_google_measurement_id']);
             if ( substr($measurementId,0,2) == "G-" ) {
                 echo "<!-- Global site tag (gtag.js) - Google Analytics -->";
-                echo "<script async src=\"https://www.googletagmanager.com/gtag/js?id=" . $measurementId . "\"></script>";
-                echo "<script>";
-                echo "  window.dataLayer = window.dataLayer || [];";
-                echo "  function gtag(){dataLayer.push(arguments);}";
-                echo "  gtag('js', new Date());";
-
-                echo "  gtag('config', '" . $measurementId . "');";
+                echo "<script async src=\"https://www.googletagmanager.com/gtag/js?id=" . $measurementId . "\"></script>". PHP_EOL;
+                echo "<script>" . PHP_EOL;
+                echo " window.dataLayer = window.dataLayer || [];";
+                echo " function gtag(){dataLayer.push(arguments);}";
+                echo " gtag('js', new Date());";
+                echo " gtag('config', '" . $measurementId . "');";
+                echo "</script>" . PHP_EOL;
+                echo "<script>" . PHP_EOL;
+                echo " gtag('get', '" . $measurementId . "', 'session_id', (field) => { sessionStorage.setItem('ga4_session_id', field); });";
+                echo " gtag('get', '" . $measurementId . "', 'client_id', (field) => { sessionStorage.setItem('ga4_client_id', field);  });";
+                echo " gtag('get', '" . $measurementId . "', 'gclid', (field) => { sessionStorage.setItem('ads_gclid', field);  });";
+                echo " var ga4Context = function({ payload, next, integrations }) {    " ;
+                echo " const sessionId = sessionStorage.getItem('ga4_session_id');";
+                echo " if (sessionId) { ";
+                echo " const clientId = sessionStorage.getItem('ga4_client_id');";
+                echo " const gclid = sessionStorage.getItem('ads_gclid');";
+                echo " payload.obj.context.ga4_session = { \"session_id\": sessionId, \"client_id\": clientId, \"gclid\": gclid };" ;                
+                echo " next(payload);" ;
+                echo " };" ;
+                echo " };" ;
+                echo " analytics.addSourceMiddleware(ga4Context);" ;
                 echo "</script>" . PHP_EOL;
             } else {
-                echo "<!-- Global site tag (gtag.js) - INVALID MEASUREMENT ID -->";
+                echo "<!-- Global site tag (gtag.js) - INVALID MEASUREMENT ID -->" . PHP_EOL;
+            }
+
+            if ( isset( $segment['segment_google_identify_enabled'] ) && $segment['segment_google_identify_enabled'] == "Y" ) {
+                echo "<script>" . PHP_EOL;
+                echo " var ga4_session_id = sessionStorage.getItem('ga4_session_id');";
+                echo " if (ga4_session_id) { ";
+                echo " var ajs_user_traits = localStorage.getItem('ajs_user_traits');";
+                echo " ajs_user_traits = (ajs_user_traits != null) ? JSON.parse(ajs_user_traits) : {};";
+                echo " var cSessionId = ( ajs_user_traits.hasOwnProperty('ga4_session_id') ) ? ajs_user_traits.ga4_session_id : 0;";
+                echo " if ( cSessionId != ga4_session_id ) { " ;
+                echo " var ga4_client_id = sessionStorage.getItem('ga4_client_id');";
+                echo " analytics.identify( { \"ga4_session_id\": ga4_session_id, \"ga4_client_id\": ga4_client_id } );";
+                echo " }";
+                echo " }";
+                echo "</script>" . PHP_EOL;
             }
         }
     }

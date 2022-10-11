@@ -7,18 +7,18 @@
  * @license     GPL-3.0+
  *
  * @wordpress-plugin
- * Plugin Name: Segment WP Connection
+ * Plugin Name: WordPress Segment Connection
  * Plugin URI:  https://github.com/chriscarrel/twilio-segment-wp/
  * Description: WordPress implementation of Segment analytics.js source with basic support for Gravity Forms.
- * Version:     1.1.11
+ * Version:     1.1.12
  * Author:      Chris Carrel
- * Author URI:  https://segment.com
+ * Author URI:  https://www.linkedin.com/in/chriscarrel/
  * Text Domain: segment
  * License:     GPL-3.0+
  * License URI: http://www.gnu.org/licenses/gpl-3.0.txt
  */
 
-namespace Twilio\Segment;
+namespace Alquemie\Twilio\Segment;
 
 /**
  * Gets this plugin's absolute directory path.

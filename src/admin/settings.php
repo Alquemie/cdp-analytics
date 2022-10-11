@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Twilio\Segment;
+namespace Alquemie\Twilio\Segment;
 
 class settings {
 
@@ -50,7 +50,7 @@ class settings {
 			'segment_keys',
 			'segment_keys_section'
 		);
-/*
+
 		add_settings_field(
 			'segment_custom_domain',
 			__( 'Custom Subdomain', 'segment' ),
@@ -58,7 +58,6 @@ class settings {
 			'segment_keys',
 			'segment_keys_section'
 		);
-*/
 
 		add_settings_field(
 			'segment_google_enabled',
@@ -72,6 +71,14 @@ class settings {
 			'segment_google_measurement_id',
 			__( 'GA4 Measurement ID', 'segment' ),
 			array( $this, 'render_segment_ga4_measurment_field' ),
+			'segment_keys',
+			'segment_keys_section'
+		);
+
+		add_settings_field(
+			'segment_google_identify',
+			__( 'Identify GA Session', 'segment' ),
+			array( $this, 'render_segment_ga4_identify_field' ),
 			'segment_keys',
 			'segment_keys_section'
 		);
@@ -122,7 +129,7 @@ class settings {
 		$value = isset( $options['segment_custom_domain'] ) ? $options['segment_custom_domain'] : '';
 
 		// Field output.
-		echo '<input type="text" name="segment_keys[segment_custom_domain]" class="regular-text segment_custom_domain_field" placeholder="' . esc_attr__( '', 'segment' ) . '" value="' . esc_attr( $value ) . '">';
+		echo '<input type="text" name="segment_keys[segment_custom_domain]" class="regular-text segment_custom_domain_field" placeholder="' . esc_attr__( 'cdn.segment.com', 'segment' ) . '" value="' . esc_attr( $value ) . '">';
 		echo '<p class="description">' . __( 'Contact friends@segment to configure your custom Segment subdomain', 'segment' ) . '</p>';
 
 	}
@@ -131,15 +138,17 @@ class settings {
 
 		// Retrieve data from the database.
 		$options = get_option( 'segment_keys' );
-		$yesVal = ( isset( $options['segment_google_enabled'] ) && $options['segment_google_enabled'] == "Y" ) ? true : false;
-		$noVal = !$yesVal;
-		
+		$enabled = ( isset( $options['segment_google_enabled'] ) && $options['segment_google_enabled'] == "Y" ) ? true : false;
+		$checked = $enabled ? 'checked="true"' : '' ;
+		$notChecked = !$enabled ? 'checked="true"' : '' ;
+
 		// Field output.
+		// echo "Testing: " . print_r($options, true) . " - Enabled: " . $enabled . " Checked: " . $checked;
 		echo "<fieldset>";
-		$checked = !$value ? 'checked="true"' : '' ;
-		echo "<label for=\"segment_google_enabled-0\"><input type=\"radio\" name=\"segment_option_name[segment_google_enabled]\" id=\"segment_google_enabled-0\" value=\"N\" " . $checked . " onClick=\"toggleGAfield();\"> No</label><br>";
-		$checked = $value ? 'checked' : '' ;
-		echo "<label for=\"segment_google_enabled-1\"><input type=\"radio\" name=\"segment_option_name[segment_google_enabled]\" id=\"segment_google_enabled-1\" value=\"Y\" " . $checked . " onClick=\"toggleGAfield();\"> Yes</label></fieldset>" . PHP_EOL;
+		// $checked = !$value ? 'checked="true"' : '' ;
+		echo "<label for=\"segment_google_enabled-0\"><input type=\"radio\" name=\"segment_keys[segment_google_enabled]\" id=\"segment_google_enabled-0\" value=\"N\" " . $notChecked . " onClick=\"toggleGAfield();\"> No</label><br>";
+		// $checked = $value ? 'checked' : '' ;
+		echo "<label for=\"segment_google_enabled-1\"><input type=\"radio\" name=\"segment_keys[segment_google_enabled]\" id=\"segment_google_enabled-1\" value=\"Y\" " . $checked . " onClick=\"toggleGAfield();\"> Yes</label></fieldset>" . PHP_EOL;
 	
 	}
 
@@ -159,10 +168,29 @@ class settings {
 			echo "   toggleGAfield(); ";
 		echo "});" . PHP_EOL;
 		echo "function toggleGAfield() {";
-		echo "    var enabled = (jQuery('input[name=\"segment_option_name[segment_google_enabled]\"]:checked').val() == \"true\");";
+		echo "    var enabled = (jQuery('input[name=\"segment_keys[segment_google_enabled]\"]:checked').val() == \"Y\");";
+		echo "    /* console.log('enable GA: ' + jQuery('input[name=\"segment_keys[segment_google_enabled]\"]:checked').val() ); */ ";
 		echo "    jQuery('input[name=\"segment_keys[segment_google_measurement_id]\"]').prop('disabled', !enabled);";	
 		echo "}" . PHP_EOL;
 		echo "</script>" . PHP_EOL;
+	}
+
+	function render_segment_ga4_identify_field() {
+
+		// Retrieve data from the database.
+		$options = get_option( 'segment_keys' );
+		$enabled = ( isset( $options['segment_google_identify_enabled'] ) && $options['segment_google_identify_enabled'] == "Y" ) ? true : false;
+		$checked = $enabled ? 'checked="true"' : '' ;
+		$notChecked = !$enabled ? 'checked="true"' : '' ;
+
+		// Field output.
+		// echo "Testing: " . print_r($options, true) . " - Enabled: " . $enabled . " Checked: " . $checked;
+		echo "<fieldset>";
+		// $checked = !$value ? 'checked="true"' : '' ;
+		echo "<label for=\"segment_google_identify_enabled-0\"><input type=\"radio\" name=\"segment_keys[segment_google_identify_enabled]\" id=\"segment_google_identify_enabled-0\" value=\"N\" " . $notChecked . " onClick=\"toggleGAfield();\"> No</label><br>";
+		// $checked = $value ? 'checked' : '' ;
+		echo "<label for=\"segment_google_identify_enabled-1\"><input type=\"radio\" name=\"segment_keys[segment_google_identify_enabled]\" id=\"segment_google_identify_enabled-1\" value=\"Y\" " . $checked . " onClick=\"toggleGAfield();\"> Yes</label></fieldset>" . PHP_EOL;
+	
 	}
 
 	function render_segment_enabled_modules() {

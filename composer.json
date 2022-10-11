@@ -1,5 +1,5 @@
 {
-	"name": "chriscarrel/twilio-segment",
+	"name": "alquemie/wp-twilio-segment",
 	"description": "WordPress implementation of Segment analytics.js source with basic support for Gravity Forms.",
 	"type": "wordpress-plugin",
 	"license": "GPL-3.0-or-later",
@@ -17,9 +17,9 @@
 	},
 	"autoload-dev": {
 		"psr-4": {
-			"Twilio\\Segment\\Tests\\PHP\\": "tests/php/",
-			"Twilio\\Segment\\Tests\\PHP\\Unit\\": "tests/php/unit/",
-			"Twilio\\Segment\\Tests\\PHP\\Integration\\": "tests/php/integration/"
+			"Alquemie\\Twilio\\Segment\\Tests\\PHP\\": "tests/php/",
+			"Alquemie\\Twilio\\Segment\\Tests\\PHP\\Unit\\": "tests/php/unit/",
+			"Alquemie\\Twilio\\Segment\\Tests\\PHP\\Integration\\": "tests/php/integration/"
 		}
 	},
 	"require": {

@@ -2,14 +2,14 @@
 /**
  * Track and Identify Forms.
  *
- * @package     Twilio\Segment
+ * @package     Alquemie\Twilio\Segment
  * @since       1.0.0
  * @author      Chris Carrel
  * @link        https://segment.com
  * @license     GNU-2.0+
  */
 
-namespace Twilio\Segment;
+namespace Alquemie\Twilio\Segment;
 
 class forms {
 
