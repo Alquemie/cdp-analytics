@@ -9,7 +9,8 @@
  * @license     GNU-2.0+
  */
 
-namespace Alquemie\Twilio\Segment;
+namespace Alquemie\Segment;
+
 
 class forms {
 

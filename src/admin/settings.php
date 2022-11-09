@@ -1,7 +1,8 @@
 <?php
 
 
-namespace Alquemie\Twilio\Segment;
+namespace Alquemie\Segment;
+
 
 class settings {
 
