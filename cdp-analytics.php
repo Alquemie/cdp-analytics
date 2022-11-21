@@ -2,15 +2,15 @@
 /**
  * Segment Connection
  *
- * @package     Alquemie\Segment
+ * @package     Alquemie\CDP
  * @author      Chris Carrel
  * @license     GPL-3.0+
  *
  * @wordpress-plugin
- * Plugin Name: WordPress Segment Connection
- * Plugin URI:  https://github.com/alquemie/segment-cdp/
- * Description: WordPress implementation of Segment analytics.js source with basic support for Gravity Forms.
- * Version:     1.1.12
+ * Plugin Name: CDP Analytics (Segment) for WP
+ * Plugin URI:  https://github.com/alquemie/cdp-analytics/
+ * Description: WordPress implementation of Segment analytics.js source with support for external link tracking.
+ * Version:     1.3.0
  * Author:      Chris Carrel
  * Author URI:  https://www.linkedin.com/in/chriscarrel/
  * Text Domain: alquemie
@@ -18,7 +18,7 @@
  * License URI: http://www.gnu.org/licenses/gpl-3.0.txt
  */
 
-namespace Alquemie\Segment;
+namespace Alquemie\CDP;
 
 /**
  * Gets this plugin's absolute directory path.
@@ -89,7 +89,8 @@ function _get_plugin_url() {
  * @return bool
  */
 function _is_in_development_mode() {
-	return defined( WP_DEBUG ) && WP_DEBUG === true;
+	$isDebug = (defined( 'WP_DEBUG' ) )  ? WP_DEBUG : false;
+	return $isDebug;
 }
 
 /**
@@ -100,28 +101,19 @@ function _is_in_development_mode() {
  * @return void
  */
 function autoload_files() {
-	$files = array(// add the list of files to load here.
-		'public/analytics.php',
-		// 'public/forms.php',
-		'admin/settings.php'
+	$files = array(
+		// add the list of files to load here.
+		'lib/autoload.php',
+		'src/public/class-cdp-ajs.php',
+		'src/public/class-cdp-analytics.php',
+		'src/admin/class-cdp-settings.php'
 	);
 
 	foreach ( $files as $file ) {
-		require __DIR__ . '/src/' . $file;
+		require __DIR__ . '/' . $file;
 	}
 }
 
-/**
- * Enqueue the plugin's scripts and styles.
- *
- * @since 1.0.0
- *
- * @return void
- */
-function load_public_scripts() {
-	wp_enqueue_script( 'alquemie_segment_js', plugins_url( 'assets/public/js/frontend.js', __FILE__ ), array('jQuery'), _get_asset_version('/assets/public/js/frontend.js'), true );
-	
-}
 
 /**
  * Launch the plugin.
@@ -131,9 +123,8 @@ function load_public_scripts() {
  * @return void
  */
 function launch() {
-	add_action('wp_enqueue_scripts', 'Alquemie\Segment\load_public_scripts');
-
 	autoload_files();
+	do_action( 'cdp_analytics_loaded' );
 }
 
 launch();

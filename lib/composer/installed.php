@@ -1,22 +1,22 @@
 <?php return array(
     'root' => array(
-        'pretty_version' => 'dev-main',
-        'version' => 'dev-main',
+        'pretty_version' => '1.0.0+no-version-set',
+        'version' => '1.0.0.0',
         'type' => 'wordpress-plugin',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => '6e439941f14a552517836b697548c1df76742ff7',
+        'reference' => NULL,
         'name' => 'alquemie/segment-cdp',
         'dev' => true,
     ),
     'versions' => array(
         'alquemie/segment-cdp' => array(
-            'pretty_version' => 'dev-main',
-            'version' => 'dev-main',
+            'pretty_version' => '1.0.0+no-version-set',
+            'version' => '1.0.0.0',
             'type' => 'wordpress-plugin',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => '6e439941f14a552517836b697548c1df76742ff7',
+            'reference' => NULL,
             'dev_requirement' => false,
         ),
         'composer/installers' => array(
@@ -34,7 +34,7 @@
             'type' => 'metapackage',
             'install_path' => NULL,
             'aliases' => array(),
-            'reference' => '964c5d9ca40d0ec72db203b3dd6382a30abef616',
+            'reference' => '5317244268eb40e418f1cf8afa6d1d9df4e1f4a3',
             'dev_requirement' => true,
         ),
         'roundcube/plugin-installer' => array(
