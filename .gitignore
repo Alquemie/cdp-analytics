@@ -4,3 +4,5 @@ composer.lock
 /logs/
 /reports/
 .DS_Store
+yarn.lock
+

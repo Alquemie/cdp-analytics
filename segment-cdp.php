@@ -2,23 +2,23 @@
 /**
  * Segment Connection
  *
- * @package     Twilio\Segment
+ * @package     Alquemie\Segment
  * @author      Chris Carrel
  * @license     GPL-3.0+
  *
  * @wordpress-plugin
  * Plugin Name: WordPress Segment Connection
- * Plugin URI:  https://github.com/chriscarrel/twilio-segment-wp/
+ * Plugin URI:  https://github.com/alquemie/segment-cdp/
  * Description: WordPress implementation of Segment analytics.js source with basic support for Gravity Forms.
  * Version:     1.1.12
  * Author:      Chris Carrel
  * Author URI:  https://www.linkedin.com/in/chriscarrel/
- * Text Domain: segment
+ * Text Domain: alquemie
  * License:     GPL-3.0+
  * License URI: http://www.gnu.org/licenses/gpl-3.0.txt
  */
 
-namespace Alquemie\Twilio\Segment;
+namespace Alquemie\Segment;
 
 /**
  * Gets this plugin's absolute directory path.
@@ -102,13 +102,25 @@ function _is_in_development_mode() {
 function autoload_files() {
 	$files = array(// add the list of files to load here.
 		'public/analytics.php',
-		'public/forms.php',
+		// 'public/forms.php',
 		'admin/settings.php'
 	);
 
 	foreach ( $files as $file ) {
 		require __DIR__ . '/src/' . $file;
 	}
+}
+
+/**
+ * Enqueue the plugin's scripts and styles.
+ *
+ * @since 1.0.0
+ *
+ * @return void
+ */
+function load_public_scripts() {
+	wp_enqueue_script( 'alquemie_segment_js', plugins_url( 'assets/public/js/frontend.js', __FILE__ ), array('jQuery'), _get_asset_version('/assets/public/js/frontend.js'), true );
+	
 }
 
 /**
@@ -119,6 +131,8 @@ function autoload_files() {
  * @return void
  */
 function launch() {
+	add_action('wp_enqueue_scripts', 'Alquemie\Segment\load_public_scripts');
+
 	autoload_files();
 }
 

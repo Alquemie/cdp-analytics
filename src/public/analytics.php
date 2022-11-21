@@ -30,7 +30,12 @@ class analytics {
             echo "}}();";
             echo "</script>" ;
         }
-
+        if ( isset( $segment['segment_tracklinks_enabled'] ) && $segment['segment_tracklinks_enabled'] == "Y" ) { 
+            echo "<script>var alquemieTracklinksEnabled = true;</script>";
+        } else {
+            echo "<script>var alquemieTracklinksEnabled = false;</script>";
+        }
+        
         if ( isset( $segment['segment_google_measurement_id'] ) && isset( $segment['segment_google_enabled'] ) && $segment['segment_google_enabled'] == "Y" ) {
             $measurementId = strtoupper($segment['segment_google_measurement_id']);
             if ( substr($measurementId,0,2) == "G-" ) {

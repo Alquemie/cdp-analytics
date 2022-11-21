@@ -21,8 +21,8 @@ class settings {
 	public function add_admin_menu() {
 
 		add_options_page(
-			esc_html__( 'Segment for WordPress', 'segment' ),
-			esc_html__( 'Segment', 'segment' ),
+			esc_html__( 'Segment for WordPress', 'alquemie' ),
+			esc_html__( 'Segment', 'alquemie' ),
 			'manage_options',
 			'segment',
 			array( $this, 'page_layout' )
@@ -46,7 +46,7 @@ class settings {
 
 		add_settings_field(
 			'segment_write_key',
-			__( 'Write Key', 'segment' ),
+			__( 'Write Key', 'alquemie' ),
 			array( $this, 'render_segment_write_key_field' ),
 			'segment_keys',
 			'segment_keys_section'
@@ -54,15 +54,23 @@ class settings {
 
 		add_settings_field(
 			'segment_custom_domain',
-			__( 'Custom Subdomain', 'segment' ),
+			__( 'Custom Subdomain', 'alquemie' ),
 			array( $this, 'render_segment_custom_domain_field' ),
 			'segment_keys',
 			'segment_keys_section'
 		);
 
 		add_settings_field(
+			'segment_tracklinks_enabled',
+			__( 'Enable Link Tracking', 'alquemie' ),
+			array( $this, 'render_segment_tracklinks_enable_field' ),
+			'segment_keys',
+			'segment_keys_section'
+		);
+
+		add_settings_field(
 			'segment_google_enabled',
-			__( 'Enable Local gTag', 'segment' ),
+			__( 'Enable Local gTag', 'alquemie' ),
 			array( $this, 'render_segment_ga4_enable_field' ),
 			'segment_keys',
 			'segment_keys_section'
@@ -70,7 +78,7 @@ class settings {
 
 		add_settings_field(
 			'segment_google_measurement_id',
-			__( 'GA4 Measurement ID', 'segment' ),
+			__( 'GA4 Measurement ID', 'alquemie' ),
 			array( $this, 'render_segment_ga4_measurment_field' ),
 			'segment_keys',
 			'segment_keys_section'
@@ -78,7 +86,7 @@ class settings {
 
 		add_settings_field(
 			'segment_google_identify',
-			__( 'Identify GA Session', 'segment' ),
+			__( 'Identify GA Session', 'alquemie' ),
 			array( $this, 'render_segment_ga4_identify_field' ),
 			'segment_keys',
 			'segment_keys_section'
@@ -89,7 +97,7 @@ class settings {
 
 		// Check required user capability
 		if ( !current_user_can( 'manage_options' ) )  {
-			wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'segment' ) );
+			wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'alquemie' ) );
 		}
 
 		// Admin Page Layout
@@ -116,8 +124,8 @@ class settings {
 		$value = isset( $options['segment_write_key'] ) ? $options['segment_write_key'] : '';
 
 		// Field output.
-		echo '<input type="text" name="segment_keys[segment_write_key]" class="regular-text segment_write_key_field" placeholder="' . esc_attr__( '', 'segment' ) . '" value="' . esc_attr( $value ) . '">';
-		echo '<p class="description">' . __( 'Analytics.js write key for the source assigned to this site', 'segment' ) . '</p>';
+		echo '<input type="text" name="segment_keys[segment_write_key]" class="regular-text segment_write_key_field" placeholder="' . esc_attr__( '', 'alquemie' ) . '" value="' . esc_attr( $value ) . '">';
+		echo '<p class="description">' . __( 'Analytics.js write key for the source assigned to this site', 'alquemie' ) . '</p>';
 
 	}
 
@@ -130,9 +138,27 @@ class settings {
 		$value = isset( $options['segment_custom_domain'] ) ? $options['segment_custom_domain'] : '';
 
 		// Field output.
-		echo '<input type="text" name="segment_keys[segment_custom_domain]" class="regular-text segment_custom_domain_field" placeholder="' . esc_attr__( 'cdn.segment.com', 'segment' ) . '" value="' . esc_attr( $value ) . '">';
-		echo '<p class="description">' . __( 'Contact friends@segment to configure your custom Segment subdomain', 'segment' ) . '</p>';
+		echo '<input type="text" name="segment_keys[segment_custom_domain]" class="regular-text segment_custom_domain_field" placeholder="' . esc_attr__( 'cdn.segment.com', 'alquemie' ) . '" value="' . esc_attr( $value ) . '">';
+		echo '<p class="description">' . __( 'Contact friends@segment to configure your custom Segment subdomain', 'alquemie' ) . '</p>';
 
+	}
+
+	function render_segment_tracklinks_enable_field() {
+
+		// Retrieve data from the database.
+		$options = get_option( 'segment_keys' );
+		$enabled = ( isset( $options['segment_tracklinks_enabled'] ) && $options['segment_tracklinks_enabled'] == "Y" ) ? true : false;
+		$checked = $enabled ? 'checked="true"' : '' ;
+		$notChecked = !$enabled ? 'checked="true"' : '' ;
+
+		// Field output.
+		// echo "Testing: " . print_r($options, true) . " - Enabled: " . $enabled . " Checked: " . $checked;
+		echo "<fieldset>";
+		// $checked = !$value ? 'checked="true"' : '' ;
+		echo "<label for=\"segment_tracklinks_enabled-0\"><input type=\"radio\" name=\"segment_keys[segment_tracklinks_enabled]\" id=\"segment_tracklinks_enabled-0\" value=\"N\" " . $notChecked . " > No</label><br>";
+		// $checked = $value ? 'checked' : '' ;
+		echo "<label for=\"segment_tracklinks_enabled-1\"><input type=\"radio\" name=\"segment_keys[segment_tracklinks_enabled]\" id=\"segment_tracklinks_enabled-1\" value=\"Y\" " . $checked . " > Yes</label></fieldset>" . PHP_EOL;
+	
 	}
 
 	function render_segment_ga4_enable_field() {
@@ -162,8 +188,8 @@ class settings {
 		$value = isset( $options['segment_google_measurement_id'] ) ? strtoupper($options['segment_google_measurement_id']) : '';
 
 		// Field output.
-		echo '<input type="text" name="segment_keys[segment_google_measurement_id]" class="regular-text segment_google_measurement_id_field" placeholder="' . esc_attr__( '', 'segment' ) . '" value="' . esc_attr( $value ) . '">';
-		echo '<p class="description">' . __( 'Measurement ID to add GA4 to site natively', 'segment' ) . '</p>';
+		echo '<input type="text" name="segment_keys[segment_google_measurement_id]" class="regular-text segment_google_measurement_id_field" placeholder="' . esc_attr__( '', 'alquemie' ) . '" value="' . esc_attr( $value ) . '">';
+		echo '<p class="description">' . __( 'Measurement ID to add GA4 to site natively', 'alquemie' ) . '</p>';
 		echo "<script>" . PHP_EOL;
 		echo "jQuery(document).ready(function() {";
 			echo "   toggleGAfield(); ";
@@ -199,7 +225,7 @@ class settings {
 		echo '<h2>' . __( 'Active Modules', 'segment') . '</h2>';
 		echo '<ul>' . PHP_EOL;
 		if ( class_exists( 'GFForms' ) ) {
-			echo '<li >' . __( 'GravityForms Track/Identify', 'segment' ) . '</li>' . PHP_EOL;
+			echo '<li >' . __( 'GravityForms Track/Identify', 'alquemie' ) . '</li>' . PHP_EOL;
 		}
 		echo '</ul>' . PHP_EOL;
 
