@@ -1,4 +1,4 @@
-# Segment Analytics.js for WordPress
+# CDP Analytics (Segment) for WordPress
 
 [Twilio Segment](https://www.segment.com) is the leading CDP utilized by over 20,000+ businesses.  This plugin automates the implementation of Segment's Analytics.JS code snippet and provides additional support for tracking links and social sharing.  
 
