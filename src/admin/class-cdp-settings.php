@@ -40,8 +40,8 @@ class settings {
 	public function add_admin_menu() {
 
 		add_options_page(
-			esc_html__( 'Segment for WordPress', 'cdp-analytics' ),
-			esc_html__( 'Segment', 'cdp-analytics' ),
+			esc_html__( 'CDP Analytics (Segment) for WordPress', 'cdp-analytics' ),
+			esc_html__( 'CDP Analytics', 'cdp-analytics' ),
 			'manage_options',
 			'cdp-analytics',
 			array( $this, 'page_layout' )
@@ -67,14 +67,6 @@ class settings {
 			'segment_write_key',
 			__( 'Write Key', 'cdp-analytics' ),
 			array( $this, 'render_segment_write_key_field' ),
-			'segment_keys',
-			'segment_keys_section'
-		);
-
-		add_settings_field(
-			'segment_region_setting',
-			__( 'Segment Region', 'cdp-analytics' ),
-			array( $this, 'render_segment_region_setting_field' ),
 			'segment_keys',
 			'segment_keys_section'
 		);
@@ -113,6 +105,13 @@ class settings {
 			array("label_for" => "segment_share_selector", "class" => "share_selector_row")
 		);
 
+		add_settings_field(
+			'segment_region_setting',
+			__( 'Segment Region', 'cdp-analytics' ),
+			array( $this, 'render_segment_region_setting_field' ),
+			'segment_keys',
+			'segment_keys_section'
+		);
 		/*
 		add_settings_field(
 			'segment_google_enabled',
@@ -184,15 +183,18 @@ class settings {
 		$options = get_option( 'segment_keys' );
 		$curVal = isset( $options['segment_region_setting'] ) ? $options['segment_region_setting'] : 'us';
 		$oregon = ($curVal == 'us') ? 'checked="true"' : '' ;
-		$dublin = ($curVal == 'eu1')? 'checked="true"' : '' ;
+		$dublin = ($curVal == 'eu2')? 'checked="true"' : '' ;
+		$singapore = ($curVal == 'ap1')? 'checked="true"' : '' ;
+		$sydney = ($curVal == 'au1')? 'checked="true"' : '' ;
 
 		// Field output.
 		// echo "Testing: " . print_r($options, true) . " - Enabled: " . $enabled . " Checked: " . $checked;
 		echo "<fieldset>";
-		// $checked = !$value ? 'checked="true"' : '' ;
 		echo "<label for=\"segment_region_setting-0\"><input type=\"radio\" name=\"segment_keys[segment_region_setting]\" id=\"segment_region_setting-0\" value=\"us\" " . $oregon . " > Oregon (Default)</label><br>";
-		// $checked = $value ? 'checked' : '' ;
-		echo "<label for=\"segment_region_setting-1\"><input type=\"radio\" name=\"segment_keys[segment_region_setting]\" id=\"segment_region_setting-1\" value=\"eu1\" " . $dublin . " > Dublin</label></fieldset>" . PHP_EOL;
+		echo "<label for=\"segment_region_setting-1\"><input type=\"radio\" name=\"segment_keys[segment_region_setting]\" id=\"segment_region_setting-1\" value=\"eu2\" " . $dublin . " > Dublin</label>" . PHP_EOL;
+		//echo "<label for=\"segment_region_setting-1\"><input type=\"radio\" name=\"segment_keys[segment_region_setting]\" id=\"segment_region_setting-2\" value=\"ap1\" " . $singapore . " > Singapore</label>" . PHP_EOL;
+		//echo "<label for=\"segment_region_setting-1\"><input type=\"radio\" name=\"segment_keys[segment_region_setting]\" id=\"segment_region_setting-3\" value=\"au1\" " . $sydney . " > Sydney</label>" . PHP_EOL;
+		echo "</fieldset>" . PHP_EOL;
 	}
 
 	function render_segment_custom_domain_field() {
