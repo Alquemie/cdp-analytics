@@ -7,8 +7,8 @@ jQuery(document).ready(function($) {
 		window.location.href = destUrl;
 	}
 
-	ajsTrackSocialShare = function(lnk) {
-		let shareLink = ( (href != '') && (href != '#') ) ? href : jQuery(cdpAnalyticsSocialLinks);
+	ajsTrackSocialShare = function(href, lnk) {
+		let shareLink = ( (href != '') && (href != '#') ) ? href : lnk.attr(cdp_analytics.social_selector);
 
 		let sharedTo = (shareLink.includes("facebook.com")) ? "facebook" : "unkown";
 		sharedTo = (shareLink.includes("twitter.com")) ? "twitter" : sharedTo;
@@ -24,6 +24,17 @@ jQuery(document).ready(function($) {
 		} );
 
 		return false;
+	}
+
+	ajsInteractiveLink = function(href, lnk) {
+		let elEv = {}; 
+		elEv.non_interactive=false; 
+		elEv.label = lnk.text().replace("’","'");
+		elEv.link_url = href;
+		elEv.link_type = 'engagement';
+
+		analytics.track('Link Clicked', elEv );
+		return true;
 	}
 
 	ajsTrackLinkClick = function(href, lnk) {
@@ -50,7 +61,7 @@ jQuery(document).ready(function($) {
 			elEv.link_type = 'download';
 			elEv.file_type = extension[0];
 			// elEv.click_url = href.replace(/ /g,'-');
-			elEv.loc = baseHref + href;
+			elEv.link_url = baseHref + href;
 			requiresCallback = (lnk.attr('target') == undefined || lnk.attr('target').toLowerCase() != '_blank');
 		} else if (href.match(/^https?\:/i)) {
 			elEv.link_type = 'external';
@@ -87,7 +98,7 @@ jQuery(document).ready(function($) {
 			
 			return fb || twt || lnkd || pin;
 		}).attr({rel: "social" }); 
-		$(cdp_analytics.social_selector).attr({rel: "social" });
+		$("[" + cdp_analytics.social_selector + "]").attr({rel: "social" });
 
 		if (cdp_analytics.force_new_window == "1") {
 			console.log("CDP Analytics: Force New Window Enabled");
@@ -102,8 +113,10 @@ jQuery(document).ready(function($) {
 			let isThisDomain = href.match(document.domain.split('.').reverse()[1] + '.' + document.domain.split('.').reverse()[0]);
 			
 			if (el.attr("rel") == "social") {
-				return ajsTrackSocialShare(el);
-			} else if (href.match(/^javascript:/i) || (href.match(/^https?\:/i) && isThisDomain) ) {
+				return ajsTrackSocialShare(href, el);
+			} else if ( href.match(/^javascript:/i) || (href != '') || (href != '#') ) {
+				return ajsInteractiveLink(href, el);
+			} else if ( (href.match(/^https?\:/i) && isThisDomain) ) {
 				return true;
 			} else {
 				return ajsTrackLinkClick(href, el)

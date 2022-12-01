@@ -34,7 +34,7 @@ class ajs {
         */
 
         $trackEnabled = ( isset( $this->_settings['segment_tracklinks_enabled'] ) && $this->_settings['segment_tracklinks_enabled'] == "Y" ) ? "1" : "0";
-		$socialSelctor = isset( $options['segment_share_selector'] ) ? $options['segment_share_selector'] : '[data-share]';
+		$socialSelctor = isset( $this->_settings['segment_share_selector'] ) ? $this->_settings['segment_share_selector'] : 'data-share';
         $newWindow = ( isset( $this->_settings['segment_ext_target_enabled'] ) && $this->_settings['segment_ext_target_enabled'] == "Y" ) ? "1" : "0";
 		
         $isDevMode = _is_in_development_mode();
