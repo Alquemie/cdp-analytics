@@ -116,3 +116,7 @@ jQuery(document).ready(function($) {
 	console.log("CDP Analytics: Link Tracking Completed");
 
 });
+
+if (cdp_analytics.enable_youtube == "1") {
+
+}

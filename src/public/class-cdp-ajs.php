@@ -18,7 +18,7 @@ class ajs {
 
     public function __construct() {
         $this->_settings = get_option( 'segment_keys' );
-        add_action('wp_head', array($this, 'addSegment'));
+        add_action( 'wp_head', array($this, 'addSegment'));
         add_action( 'wp_enqueue_scripts', array($this,  'add_scripts') );
     }
 
@@ -44,9 +44,11 @@ class ajs {
             $jsFilePath = glob( _get_plugin_directory() . '/dist/js/public.*.js' );
             $jsFileURI = _get_plugin_url() . '/dist/js/' . basename($jsFilePath[0]);
         }
-        wp_enqueue_script( 'cdp-ajs-links', $jsFileURI , array('jquery','cdp-ajs') , null , true );
+        
+        wp_enqueue_script( 'cdp-ajs-links', $jsFileURI , array('jquery') , null , true );
         wp_localize_script('cdp-ajs-links', 'cdp_analytics', array(
             'track_links' => $trackEnabled,
+            'enable_youtube' => "1",
             'social_selector' => $socialSelctor,
             'force_new_window' => $newWindow
             )
