@@ -18,19 +18,25 @@ class analytics {
     private $_settings;
     private $_anonId = null;
     private $_userId = null;
+    private $_library = array();
 
 	public function __construct($aid = null, $uid = null) {
         $this->_settings = get_option( 'segment_keys' );
         $this->_anonId = $aid;
         $this->_userId = $uid;
 
-        error_log("Initialize Analytics:");
+        $this->_library = array(
+            "name" => "analytics-php",
+            "consumer" => "LibCurl",
+            "source" => "WordPress CDP Analytics",
+            "version" => _get_plugin_version()
+        );
    
         Segment::init($this->_settings['segment_write_key'], 
             array(
                 "host" => $this->getRegion(),
                 "debug" => true,
-                "ssl" => false,
+                "ssl" => true,
                 "error_handler" => function ($code, $msg) { error_log("Segment Error: " . $code . " -> " . $msg); }
             )
         );
@@ -63,20 +69,49 @@ class analytics {
         return $return;
     }
 
-    public function track($event, $properties = array(), $context = array(), $timestamp = null) {
-        error_log("Analytics: Track - {$event}");
-
+    public function group($groupId, $traits = array(), $context = array()) {
         if (is_null($this->_anonId) && is_null($this->_userId)) {
             $this->_anonId = generateAnonId();
         }
-        $timestamp = $this->get_timestamp($timestamp);
 
-        $context["library"] = array(
-            "name" => "analytics-php",
-            "consumer" => "LibCurl",
-            "source" => "WordPress - CDP Analytics",
-            "version" => _get_plugin_version()
+        $context["library"] = $this->_library;
+
+        Segment::group(array(
+            "userId" => $this->_userId,
+            "anonymousId" => $this->_anonId,
+            "groupId" => $groupId,
+            "traits" => $traits,
+            "context" => $context,
+            )
         );
+        Segment::flush();
+    }
+
+    public function page($name, $category = null, $properties = array(), $context = array()) {
+        if (is_null($this->_anonId) && is_null($this->_userId)) {
+            $this->_anonId = generateAnonId();
+        }
+
+        $context["library"] = $this->_library;
+
+        Segment::page(array(
+            "userId" => $this->_userId,
+            "anonymousId" => $this->_anonId,
+            "category" => $category,
+            "name" => $name,
+            "properties" => $properties,
+            "context" => $context,
+            )
+        );
+        Segment::flush();
+    }
+
+    public function track($event, $properties = array(), $context = array(), $timestamp = null) {
+        if (is_null($this->_anonId) && is_null($this->_userId)) {
+            $this->_anonId = generateAnonId();
+        }
+
+        $context["library"] = $this->_library;
         
         Segment::track(array(
             "userId" => $this->_userId,
@@ -84,7 +119,6 @@ class analytics {
             "event" => $event,
             "properties" => $properties,
             "context" => $context,
-            // "timestamp" => $timestamp
             )
         );
         Segment::flush();
@@ -92,40 +126,20 @@ class analytics {
     }
 
     public function identify($traits = array(), $context = array(), $timestamp = null) {
-        error_log("Analytics: Identify");
-
         if (is_null($this->_anonId) && is_null($this->_userId)) {
             $this->_anonId = generateAnonId();
         }
-        $timestamp = $this->get_timestamp($timestamp);
-        $context["library"] = array(
-            "name" => "analytics-php",
-            "consumer" => "LibCurl",
-            "source" => "WordPress - CDP Analytics",
-            "version" => _get_plugin_version()
-        );
+        
+        $context["library"] = $this->_library;
 
         Segment::identify(array(
             "userId" => $this->_userId,
             "anonymousId" => $this->_anonId,
             "traits" => $traits,
             "context" => $context,
-            // "timestamp" => $timestamp
             )
         );
         Segment::flush();
-    }
-
-    private function get_timestamp($dateVal = null) {
-        $eventTime = (is_null($dateVal)) ? date("Y-m-d h:i:sa") : $dateVal;
-        //$tz_from = wp_timezone();
-        $tz_to = 'UTC';
-        $format = 'Y-m-d\TH:i:s\Z';
-
-        $dt = new \DateTime($eventTime, wp_timezone());
-        $dt->setTimeZone(new \DateTimeZone($tz_to));
-        
-        return $dt->format($format);
     }
 
     private function generateAnonId()
