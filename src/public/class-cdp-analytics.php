@@ -71,7 +71,7 @@ class analytics {
 
     public function group($groupId, $traits = array(), $context = array()) {
         if (is_null($this->_anonId) && is_null($this->_userId)) {
-            $this->_anonId = generateAnonId();
+            $this->_anonId = $this->generateAnonId();
         }
 
         $context["library"] = $this->_library;
@@ -89,7 +89,7 @@ class analytics {
 
     public function page($name, $category = null, $properties = array(), $context = array()) {
         if (is_null($this->_anonId) && is_null($this->_userId)) {
-            $this->_anonId = generateAnonId();
+            $this->_anonId = $this->generateAnonId();
         }
 
         $context["library"] = $this->_library;
@@ -108,7 +108,7 @@ class analytics {
 
     public function track($event, $properties = array(), $context = array(), $timestamp = null) {
         if (is_null($this->_anonId) && is_null($this->_userId)) {
-            $this->_anonId = generateAnonId();
+            $this->_anonId = $this->generateAnonId();
         }
 
         $context["library"] = $this->_library;
@@ -127,7 +127,7 @@ class analytics {
 
     public function identify($traits = array(), $context = array(), $timestamp = null) {
         if (is_null($this->_anonId) && is_null($this->_userId)) {
-            $this->_anonId = generateAnonId();
+            $this->_anonId = $this->generateAnonId();
         }
         
         $context["library"] = $this->_library;

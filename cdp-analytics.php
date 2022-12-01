@@ -1,22 +1,39 @@
 <?php
-/**
- * Segment Connection
- *
- * @package     Alquemie\CDP
- * @author      Chris Carrel
- * @license     GPL-3.0+
- *
- * @wordpress-plugin
- * Plugin Name: CDP Analytics (Segment) for WP
- * Plugin URI:  https://github.com/alquemie/cdp-analytics/
- * Description: WordPress implementation of Segment analytics.js source with support for external link tracking.
- * Version:     1.5.0
- * Author:      Chris Carrel
- * Author URI:  https://www.linkedin.com/in/chriscarrel/
- * Text Domain: alquemie
- * License:     GPL-3.0+
- * License URI: http://www.gnu.org/licenses/gpl-3.0.txt
- */
+/*
+CDP Analytics (Segment) Connection for WordPress
+
+@package     Alquemie\CDP
+@author      Chris Carrel
+@license     GPL-3.0+
+
+@wordpress-plugin
+Plugin Name: CDP Analytics (Segment) for WP
+Plugin URI:  https://github.com/alquemie/cdp-analytics/
+Description: WordPress implementation of Segment analytics.js source with support for external link tracking.
+Version:     1.5.1
+Author:      Chris Carrel
+Author URI:  https://www.linkedin.com/in/chriscarrel/
+Text Domain: cdp-analytics
+License:     GPL-3.0+
+License URI: http://www.gnu.org/licenses/gpl-3.0.txt
+
+------------------------------------------------------------------------
+Copyright 2022 Carmack Holdings, LLC.
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+*/
 
 namespace Alquemie\CDP;
 
@@ -73,7 +90,8 @@ function _get_plugin_url() {
 	static $plugin_url;
 
 	if ( empty( $plugin_url ) ) {
-		$plugin_url = plugins_url( null, __FILE__ );
+		$plugin_url = plugins_url( basename( __DIR__ ) . '' );
+
 	}
 
 	return $plugin_url;
