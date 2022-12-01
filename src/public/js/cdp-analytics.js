@@ -114,7 +114,7 @@ jQuery(document).ready(function($) {
 			
 			if (el.attr("rel") == "social") {
 				return ajsTrackSocialShare(href, el);
-			} else if ( href.match(/^javascript:/i) || (href != '') || (href != '#') ) {
+			} else if ( href.match(/^javascript:/i) || (href == '') || (href == '#') ) {
 				return ajsInteractiveLink(href, el);
 			} else if ( (href.match(/^https?\:/i) && isThisDomain) ) {
 				return true;
