@@ -1,12 +1,12 @@
 {
-	"name": "alquemie/segment-cdp",
-	"description": "WordPress implementation of Segment analytics.js with support for Gravity Forms",
+	"name": "alquemie/cdp-analytics",
+	"description": "WordPress implementation of Segment analytics.js with support for external link tracking.",
 	"type": "wordpress-plugin",
 	"license": "GPL-3.0-or-later",
 	"homepage": "https://alquemie.net/",
 	"support": {
-		"issues": "https://github.com/alquemie/segment-cdp/issues",
-		"source": "https://github.com/alquemie/segment-cdp"
+		"issues": "https://github.com/alquemie/cdp-analytics/issues",
+		"source": "https://github.com/alquemie/cdp-analytics"
 	},
 	"minimum-stability": "dev",
 	"prefer-stable": true,

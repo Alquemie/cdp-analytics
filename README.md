@@ -1,6 +1,6 @@
 # Segment Analytics.js for WordPress
 
-[Twilio Segment](https://www.segment.com) is the leading CDP utilized by over 20,000+ businesses that use Segment's software and APIs to collect, clean, and control their customer data.  
+[Twilio Segment](https://www.segment.com) is the leading CDP utilized by over 20,000+ businesses.  This plugin automates the implementation of Segment's Analytics.JS code snippet and provides additional support for tracking links and social sharing.  
 
 ## Installation
 
@@ -12,12 +12,15 @@
 
 ## Plugin Features
 
-1. Add analytics.js to the site
-2. Adds analytics.page() call to all pages on the WP site
+1. Adds analytics.js to the site
+2. Adds analytics.page() call to all pages on the WP site (Segment default behavior)
 3. Ability to add 'Link Clicked' track call on external, download, mailto and tel links
 4. Ability to add 'Content Shared' track call on social share buttons
 
 ### Change Log
+
+#### v1.5.0 - Full Refactor
+- JS Code refactor to WP coding standards
 
 #### v1.3.0 - Full Refactor
 - Code Cleanup
