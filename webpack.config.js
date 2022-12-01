@@ -10,6 +10,7 @@ const config = {
 	entry: {
 		// frontend and admin will replace the [name] portion of the output config below.
 		public: './src/public/js/cdp-analytics.js',
+		// ajs: './src/public/js/segment-ajs.js',
 		admin: './src/admin/js/admin-cdp.js'
 	},
 
