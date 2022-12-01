@@ -3,7 +3,7 @@
         'name' => 'alquemie/cdp-analytics',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => 'f0d2109a5ecc5ebb90ea4ac218910c2515695cc8',
+        'reference' => '10f906612fc3381ab72313dd5505fd317b4fa674',
         'type' => 'wordpress-plugin',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -13,16 +13,16 @@
         'alquemie/cdp-analytics' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => 'f0d2109a5ecc5ebb90ea4ac218910c2515695cc8',
+            'reference' => '10f906612fc3381ab72313dd5505fd317b4fa674',
             'type' => 'wordpress-plugin',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
             'dev_requirement' => false,
         ),
         'composer/installers' => array(
-            'pretty_version' => 'v1.12.0',
-            'version' => '1.12.0.0',
-            'reference' => 'd20a64ed3c94748397ff5973488761b22f6d3f19',
+            'pretty_version' => 'v2.2.0',
+            'version' => '2.2.0.0',
+            'reference' => 'c29dc4b93137acb82734f672c37e029dfbd95b35',
             'type' => 'composer-plugin',
             'install_path' => __DIR__ . '/./installers',
             'aliases' => array(),
@@ -37,12 +37,6 @@
             'aliases' => array(),
             'dev_requirement' => true,
         ),
-        'roundcube/plugin-installer' => array(
-            'dev_requirement' => false,
-            'replaced' => array(
-                0 => '*',
-            ),
-        ),
         'segmentio/analytics-php' => array(
             'pretty_version' => '3.5.0',
             'version' => '3.5.0.0',
@@ -51,12 +45,6 @@
             'install_path' => __DIR__ . '/../segmentio/analytics-php',
             'aliases' => array(),
             'dev_requirement' => false,
-        ),
-        'shama/baton' => array(
-            'dev_requirement' => false,
-            'replaced' => array(
-                0 => '*',
-            ),
         ),
     ),
 );
