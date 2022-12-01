@@ -1,19 +1,19 @@
 <?php return array(
     'root' => array(
-        'name' => 'alquemie/segment-cdp',
+        'name' => 'alquemie/cdp-analytics',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => '22144b0d3200c5d37d38d20ed3e0c4bcedb0c680',
+        'reference' => 'f0d2109a5ecc5ebb90ea4ac218910c2515695cc8',
         'type' => 'wordpress-plugin',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
         'dev' => true,
     ),
     'versions' => array(
-        'alquemie/segment-cdp' => array(
+        'alquemie/cdp-analytics' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '22144b0d3200c5d37d38d20ed3e0c4bcedb0c680',
+            'reference' => 'f0d2109a5ecc5ebb90ea4ac218910c2515695cc8',
             'type' => 'wordpress-plugin',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
