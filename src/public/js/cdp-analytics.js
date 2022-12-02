@@ -133,3 +133,13 @@ jQuery(document).ready(function($) {
 if (cdp_analytics.enable_youtube == "1") {
 
 }
+
+if (typeof analytics != 'undefined') {
+	
+	const ADDWPTAX = function({ payload, next, integrations }) {
+		if (cdp_analytics.categories != "") payload.obj.context.page.categories = cdp_analytics.categories;
+		if (cdp_analytics.tags != "") payload.obj.context.page.tags = cdp_analytics.tags;
+		next(payload);
+	};
+	analytics.addSourceMiddleware(ADDWPTAX);
+}

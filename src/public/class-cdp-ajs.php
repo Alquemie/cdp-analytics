@@ -37,6 +37,13 @@ class ajs {
 		$socialSelctor = isset( $this->_settings['segment_share_selector'] ) ? $this->_settings['segment_share_selector'] : 'data-share';
         $newWindow = ( isset( $this->_settings['segment_ext_target_enabled'] ) && $this->_settings['segment_ext_target_enabled'] == "Y" ) ? "1" : "0";
 		
+         // global $post;
+         $terms_obj = get_the_category();
+        // $term_obj_list = get_the_terms( $post->ID, 'taxonomy' );
+         $categories = join(', ', wp_list_pluck($terms_obj, 'name'));
+         $terms_obj = get_the_tags();
+         $tags = join(', ', wp_list_pluck($terms_obj, 'name'));
+
         $isDevMode = _is_in_development_mode();
         if ($isDevMode) {
             $jsFileURI = _get_plugin_url() . '/src/public/js/cdp-analytics.js';
@@ -50,7 +57,9 @@ class ajs {
             'track_links' => $trackEnabled,
             'enable_youtube' => "1",
             'social_selector' => $socialSelctor,
-            'force_new_window' => $newWindow
+            'force_new_window' => $newWindow,
+            'categories' => $categories,
+            'tags' => $tags
             )
         );
     }

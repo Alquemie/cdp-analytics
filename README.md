@@ -18,8 +18,10 @@
 4. Ability to add 'Content Shared' track call on social share buttons
 
 ### Change Log
+#### v1.6.0
+- Added Category, Tag tracking to AJS Page Context
 
-#### v1.5.0 - Full Refactor
+#### v1.5.0
 - JS Code refactor to WP coding standards
 
 #### v1.3.0 - Full Refactor
