@@ -149,18 +149,58 @@
             "install-path": "./installers"
         },
         {
+            "name": "qriouslad/codestar-framework",
+            "version": "v2.2.8.1",
+            "version_normalized": "2.2.8.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/qriouslad/codestar-framework-packagist.git",
+                "reference": "715d17045008833eada8d7bddabd3363326094fa"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/qriouslad/codestar-framework-packagist/zipball/715d17045008833eada8d7bddabd3363326094fa",
+                "reference": "715d17045008833eada8d7bddabd3363326094fa",
+                "shasum": ""
+            },
+            "time": "2022-10-11T17:50:01+00:00",
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "classmap": [
+                    "src/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0-only"
+            ],
+            "authors": [
+                {
+                    "name": "Bowo",
+                    "email": "qriouslad@gmail.com"
+                }
+            ],
+            "description": "Composer package for the Codestar Framework",
+            "support": {
+                "issues": "https://github.com/qriouslad/codestar-framework-packagist/issues",
+                "source": "https://github.com/qriouslad/codestar-framework-packagist/tree/v2.2.8.1"
+            },
+            "install-path": "../qriouslad/codestar-framework"
+        },
+        {
             "name": "roave/security-advisories",
             "version": "dev-master",
             "version_normalized": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "c4ccfdab77bd92444c6a2f7813bc20f29dbb9d13"
+                "reference": "891ecbb72eac808c80fb97f2cce67824e94e5652"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/c4ccfdab77bd92444c6a2f7813bc20f29dbb9d13",
-                "reference": "c4ccfdab77bd92444c6a2f7813bc20f29dbb9d13",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/891ecbb72eac808c80fb97f2cce67824e94e5652",
+                "reference": "891ecbb72eac808c80fb97f2cce67824e94e5652",
                 "shasum": ""
             },
             "conflict": {
@@ -185,7 +225,7 @@
                 "awesome-support/awesome-support": "<=6.0.7",
                 "aws/aws-sdk-php": ">=3,<3.2.1",
                 "backdrop/backdrop": "<=1.23",
-                "badaso/core": "<2.6.1",
+                "badaso/core": "<2.7",
                 "bagisto/bagisto": "<0.1.5",
                 "barrelstrength/sprout-base-email": "<1.2.7",
                 "barrelstrength/sprout-forms": "<3.9",
@@ -518,7 +558,7 @@
                 "snipe/snipe-it": "<6.0.11|>= 6.0.0-RC-1, <= 6.0.0-RC-5",
                 "socalnick/scn-social-auth": "<1.15.2",
                 "socialiteproviders/steam": "<1.1",
-                "spatie/browsershot": "<3.57.3",
+                "spatie/browsershot": "<3.57.4",
                 "spipu/html2pdf": "<5.2.4",
                 "spoonity/tcpdf": "<6.2.22",
                 "squizlabs/php_codesniffer": ">=1,<2.8.1|>=3,<3.0.1",
@@ -657,7 +697,7 @@
                 "zfr/zfr-oauth2-server-module": "<0.1.2",
                 "zoujingli/thinkadmin": "<6.0.22"
             },
-            "time": "2022-11-30T22:04:13+00:00",
+            "time": "2022-12-02T23:04:13+00:00",
             "type": "metapackage",
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -759,6 +799,102 @@
                 "source": "https://github.com/segmentio/analytics-php/tree/3.5.0"
             },
             "install-path": "../segmentio/analytics-php"
+        },
+        {
+            "name": "woocommerce/action-scheduler",
+            "version": "3.5.3",
+            "version_normalized": "3.5.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/woocommerce/action-scheduler.git",
+                "reference": "63ef5af013ca3a6efdd8ef8e9363ac70778713cb"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/woocommerce/action-scheduler/zipball/63ef5af013ca3a6efdd8ef8e9363ac70778713cb",
+                "reference": "63ef5af013ca3a6efdd8ef8e9363ac70778713cb",
+                "shasum": ""
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^7.5",
+                "woocommerce/woocommerce-sniffs": "0.1.0",
+                "wp-cli/wp-cli": "~2.5.0",
+                "yoast/phpunit-polyfills": "^1.0"
+            },
+            "time": "2022-11-09T17:45:19+00:00",
+            "type": "wordpress-plugin",
+            "extra": {
+                "scripts-description": {
+                    "test": "Run unit tests",
+                    "phpcs": "Analyze code against the WordPress coding standards with PHP_CodeSniffer",
+                    "phpcbf": "Fix coding standards warnings/errors automatically with PHP Code Beautifier"
+                }
+            },
+            "installation-source": "dist",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0-or-later"
+            ],
+            "description": "Action Scheduler for WordPress and WooCommerce",
+            "homepage": "https://actionscheduler.org/",
+            "support": {
+                "issues": "https://github.com/woocommerce/action-scheduler/issues",
+                "source": "https://github.com/woocommerce/action-scheduler/tree/3.5.3"
+            },
+            "install-path": "../plugins/action-scheduler"
+        },
+        {
+            "name": "yahnis-elsts/plugin-update-checker",
+            "version": "v5.0",
+            "version_normalized": "5.0.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/YahnisElsts/plugin-update-checker.git",
+                "reference": "81be284da76f12c8751b477b2a0fa44364d26f84"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/YahnisElsts/plugin-update-checker/zipball/81be284da76f12c8751b477b2a0fa44364d26f84",
+                "reference": "81be284da76f12c8751b477b2a0fa44364d26f84",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "php": ">=5.6.20"
+            },
+            "time": "2022-10-28T17:46:32+00:00",
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "files": [
+                    "load-v5p0.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Yahnis Elsts",
+                    "email": "whiteshadow@w-shadow.com",
+                    "homepage": "https://w-shadow.com/",
+                    "role": "Developer"
+                }
+            ],
+            "description": "A custom update checker for WordPress plugins and themes. Useful if you can't host your plugin in the official WP repository but still want it to support automatic updates.",
+            "homepage": "https://github.com/YahnisElsts/plugin-update-checker/",
+            "keywords": [
+                "automatic updates",
+                "plugin updates",
+                "theme updates",
+                "wordpress"
+            ],
+            "support": {
+                "issues": "https://github.com/YahnisElsts/plugin-update-checker/issues",
+                "source": "https://github.com/YahnisElsts/plugin-update-checker/tree/v5.0"
+            },
+            "install-path": "../yahnis-elsts/plugin-update-checker"
         }
     ],
     "dev": true,

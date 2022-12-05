@@ -1,0 +1,16 @@
+{
+    "name": "qriouslad/codestar-framework",
+    "description": "Composer package for the Codestar Framework",
+    "type": "library",
+    "license": "GPL-2.0-only",
+    "authors": [
+        {
+            "name": "Bowo",
+            "email": "qriouslad@gmail.com"
+        }
+    ],
+    "autoload": {
+        "classmap": ["src/"]
+    },
+    "require": {}
+}
