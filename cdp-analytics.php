@@ -78,13 +78,13 @@ function activate_analytics() {
 	require_once _get_plugin_directory() . '/includes/class-analytics-activator.php';
 	Analytics_Activator::run();
 }
-register_activation_hook( __FILE__, 'activate_analytics' );
+register_activation_hook( __NAMESPACE__, 'activate_analytics' );
 
 function deactivate_analytics() {
 	require_once _get_plugin_directory() . '/includes/class-analytics-deactivator.php';
 	Analytics_Deactivator::run();
 }
-register_deactivation_hook( __FILE__, 'deactivate_analytics' );
+register_deactivation_hook( __NAMESPACE__, 'deactivate_analytics' );
 
 require_once _get_plugin_directory() . '/includes/class-cdp-analytics.php';
 
