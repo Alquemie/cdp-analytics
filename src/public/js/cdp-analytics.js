@@ -8,7 +8,7 @@ jQuery(document).ready(function($) {
 	}
 
 	ajsTrackSocialShare = function(href, lnk) {
-		let shareLink = ( (href != '') && (href != '#') ) ? href : lnk.attr(cdp_analytics.social_selector);
+		let shareLink = ( (href != '') && (href != '#') ) ? href : lnk.attr(cdp_analytics.social_selector.replace(/\[/g, '').replace(/\]/g, ''));
 
 		let sharedTo = (shareLink.includes("facebook.com")) ? "facebook" : "unkown";
 		sharedTo = (shareLink.includes("twitter.com")) ? "twitter" : sharedTo;
@@ -98,7 +98,8 @@ jQuery(document).ready(function($) {
 			
 			return fb || twt || lnkd || pin;
 		}).attr({rel: "social" }); 
-		$("[" + cdp_analytics.social_selector + "]").attr({rel: "social" });
+		// $("[" + cdp_analytics.social_selector + "]").attr({rel: "social" });
+		$(cdp_analytics.social_selector ).attr({rel: "social" });
 
 		if (cdp_analytics.force_new_window == "1") {
 			console.log("CDP Analytics: Force New Window Enabled");
@@ -130,7 +131,15 @@ jQuery(document).ready(function($) {
 	if (cdp_analytics.accordian_enable == "1") {
 		$(cdp_analytics.accordian_selector).click(function() {
 			let acord = $(this);
-	
+			let acordText = $(this).text();
+			if (acordText == "") {
+				var children = $(this).children;
+				for (var i = 0; i < children.length; i++) {
+					acordText = children[i].text();
+					if (acordText != "") break;
+				}
+			}
+
 			analytics.track(cdp_analytics.accordian_event, {} );
 					return true;
 		});
