@@ -131,11 +131,11 @@ jQuery(document).ready(function($) {
 	if (cdp_analytics.accordian_enable == "1") {
 		$(cdp_analytics.accordian_selector).click(function() {
 			// let acord = $(this);
-			let clickText = $(this).text();
+			let clickText = $(this).text().trim();
 			if (clickText == "") {
 				var children = $(this).children;
 				for (var i = 0; i < children.length; i++) {
-					clickText = children[i].text();
+					clickText = children[i].text().trim();
 					if (clickText != "") break;
 				}
 			}
