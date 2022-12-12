@@ -1,22 +1,22 @@
 <?php return array(
     'root' => array(
-        'pretty_version' => 'dev-main',
-        'version' => 'dev-main',
+        'pretty_version' => '2.x-dev',
+        'version' => '2.9999999.9999999.9999999-dev',
         'type' => 'wordpress-plugin',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => 'c0e075c62109347f175d30b8d9d04c41d5153cac',
+        'reference' => '565de46e167b07edbabc41fcada17f20a5e92d91',
         'name' => 'alquemie/cdp-analytics',
         'dev' => true,
     ),
     'versions' => array(
         'alquemie/cdp-analytics' => array(
-            'pretty_version' => 'dev-main',
-            'version' => 'dev-main',
+            'pretty_version' => '2.x-dev',
+            'version' => '2.9999999.9999999.9999999-dev',
             'type' => 'wordpress-plugin',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => 'c0e075c62109347f175d30b8d9d04c41d5153cac',
+            'reference' => '565de46e167b07edbabc41fcada17f20a5e92d91',
             'dev_requirement' => false,
         ),
         'composer/installers' => array(
@@ -43,7 +43,7 @@
             'type' => 'metapackage',
             'install_path' => NULL,
             'aliases' => array(),
-            'reference' => '891ecbb72eac808c80fb97f2cce67824e94e5652',
+            'reference' => 'a5d6404aa779f8c718f5e90164da5c37a6065aaf',
             'dev_requirement' => true,
         ),
         'segmentio/analytics-php' => array(
@@ -59,7 +59,7 @@
             'pretty_version' => '3.5.3',
             'version' => '3.5.3.0',
             'type' => 'wordpress-plugin',
-            'install_path' => __DIR__ . '/../plugins/action-scheduler',
+            'install_path' => __DIR__ . '/../woocommerce/action-scheduler',
             'aliases' => array(),
             'reference' => '63ef5af013ca3a6efdd8ef8e9363ac70778713cb',
             'dev_requirement' => false,

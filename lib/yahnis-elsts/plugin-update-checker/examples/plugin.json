@@ -1,16 +1,16 @@
 {
 	"name": "My Example Plugin",
 	"version": "2.0",
-	"download_url": "https://alquemie.net/updates/example-plugin.zip",
+	"download_url": "http://example.com/updates/example-plugin.zip",
 
-	"homepage": "https://alquemie.net/",
+	"homepage": "http://example.com/",
 	"requires": "4.5",
 	"tested": "4.8",
 	"last_updated": "2017-01-01 16:17:00",
 	"upgrade_notice": "Here's why you should upgrade...",
 
 	"author": "Janis Elsts",
-	"author_homepage": "https://alquemie.net/",
+	"author_homepage": "http://example.com/",
 
 	"sections": {
 		"description": "(Required) Plugin description. Basic HTML can be used in all sections.",
@@ -34,13 +34,13 @@
 			"language": "fr_FR",
 			"version": "4.0",
 			"updated": "2016-04-22 23:22:42",
-			"package": "https://alquemie.net/updates/translations/french-language-pack.zip"
+			"package": "http://example.com/updates/translations/french-language-pack.zip"
 		},
 		{
 			"language": "de_DE",
 			"version": "5.0",
 			"updated": "2016-04-22 23:22:42",
-			"package": "https://alquemie.net/updates/translations/german-language-pack.zip"
+			"package": "http://example.com/updates/translations/german-language-pack.zip"
 		}
 	],
 

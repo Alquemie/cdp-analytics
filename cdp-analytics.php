@@ -37,40 +37,13 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 
 namespace Alquemie\CDP;
 
-/**
- * Gets this plugin's absolute directory path.
- *
- * @since  1.0.2
- * @ignore
- * @access private
- *
- * @return string
- */
-function _get_plugin_version() {
-	$plugin_data = get_plugin_data( __FILE__ );
-	return $plugin_data['Version'];
-}
-
-/**
- * Get's the asset file's version number by using it's modification timestamp.
- *
- * @since 1.0.0
- *
- * @param string $relative_path Relative path to the asset file.
- *
- * @return bool|int
- */
-function _get_asset_version( $relative_path ) {
-	return filemtime( _get_plugin_directory() . $relative_path );
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
 }
 
 /**
  * Gets this plugin's absolute directory path.
- *
- * @since  1.0.0
- * @ignore
- * @access private
- *
  * @return string
  */
 function _get_plugin_directory() {
@@ -79,11 +52,6 @@ function _get_plugin_directory() {
 
 /**
  * Gets this plugin's URL.
- *
- * @since  1.0.0
- * @ignore
- * @access private
- *
  * @return string
  */
 function _get_plugin_url() {
@@ -99,50 +67,37 @@ function _get_plugin_url() {
 
 /**
  * Checks if this plugin is in development mode.
- *
- * @since  1.0.0
- * @ignore
- * @access private
- *
  * @return bool
  */
 function _is_in_development_mode() {
-	$isDebug = (defined( 'WP_DEBUG' ) )  ? WP_DEBUG : false;
+	$isDebug = (defined( 'WP_DEBUG' ) ) ? WP_DEBUG : false;
 	return $isDebug;
 }
 
-/**
- * Autoload the plugin's files.
- *
- * @since 1.0.0
- *
- * @return void
- */
-function autoload_files() {
-	$files = array(
-		// add the list of files to load here.
-		'lib/autoload.php',
-		'src/public/class-cdp-ajs.php',
-		'src/public/class-cdp-analytics.php',
-		'src/admin/class-cdp-settings.php'
-	);
-
-	foreach ( $files as $file ) {
-		require __DIR__ . '/' . $file;
-	}
+function activate_analytics() {
+	require_once _get_plugin_directory() . '/includes/class-analytics-activator.php';
+	Analytics_Activator::run();
 }
+register_activation_hook( __FILE__, 'activate_analytics' );
 
+function deactivate_analytics() {
+	require_once _get_plugin_directory() . '/includes/class-analytics-deactivator.php';
+	Analytics_Deactivator::run();
+}
+register_deactivation_hook( __FILE__, 'deactivate_analytics' );
+
+require_once _get_plugin_directory() . '/includes/class-cdp-analytics.php';
 
 /**
- * Launch the plugin.
- *
- * @since 1.0.0
- *
- * @return void
+ * Begins execution of the plugin.
  */
 function launch() {
-	autoload_files();
-	do_action( 'cdp_analytics_loaded' );
-}
+	$plugin_data = get_plugin_data( __FILE__ );
 
+	$plugin = new Analytics($plugin_data);
+	$plugin->run();
+
+	do_action( 'cdp_analytics_loaded' );
+
+}
 launch();

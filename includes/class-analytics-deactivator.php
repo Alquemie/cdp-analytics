@@ -1,13 +1,15 @@
 <?php
 
+namespace Alquemie\CDP;
+
 /**
  * Fired during plugin deactivation
  *
  * @link       https://alquemie.net
  * @since      1.0.0
  *
- * @package    CDP_Analytics
- * @subpackage Plugin_Name/includes
+ * @package    Alquemie\CDP
+ * @subpackage Analytics\includes
  */
 
 /**
@@ -16,11 +18,11 @@
  * This class defines all code necessary to run during the plugin's deactivation.
  *
  * @since      1.0.0
- * @package    CDP_Analytics
- * @subpackage Plugin_Name/includes
+ * @package    Alquemie\CDP
+ * @subpackage Analytics\includes
  * @author     Alquemie <support@alquemie.net>
  */
-class Plugin_Name_Deactivator {
+class Analytics_Deactivator {
 
 	/**
 	 * Short Description. (use period)
@@ -29,7 +31,7 @@ class Plugin_Name_Deactivator {
 	 *
 	 * @since    1.0.0
 	 */
-	public static function deactivate() {
+	public static function run() {
 
 	}
 

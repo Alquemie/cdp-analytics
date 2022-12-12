@@ -125,21 +125,32 @@ jQuery(document).ready(function($) {
 		});
 
 	}
-
 	console.log("CDP Analytics: Link Tracking Completed");
+
+	if (cdp_analytics.accordian_enable == "1") {
+		$(cdp_analytics.accordian_selector).click(function() {
+			let acord = $(this);
+	
+			analytics.track(cdp_analytics.accordian_event, {} );
+					return true;
+		});
+		
+		console.log("CDP Analytics: Accordian Tracking");
+	}
 
 });
 
-if (cdp_analytics.enable_youtube == "1") {
 
-}
 
-if (typeof analytics != 'undefined') {
+if ( (typeof analytics !== 'undefined') && (cdp_analytics.taxonomy_context == "1" ) ) {
 	
 	const ADDWPTAX = function({ payload, next, integrations }) {
-		if (cdp_analytics.categories != "") payload.obj.context.page.categories = cdp_analytics.categories;
-		if (cdp_analytics.tags != "") payload.obj.context.page.tags = cdp_analytics.tags;
+		if (payload.obj.type == "page") {
+			if (cdp_analytics.categories != "") payload.obj.context.page.categories = cdp_analytics.categories;
+			if (cdp_analytics.tags != "") payload.obj.context.page.tags = cdp_analytics.tags;
+		}
 		next(payload);
 	};
 	analytics.addSourceMiddleware(ADDWPTAX);
+
 }

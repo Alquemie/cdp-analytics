@@ -35,12 +35,12 @@
 	},
 	"extra": {
 		"installer-paths": {
-				"lib/plugins/{$name}/": [
+				"lib/{$vendor}/{$name}/": [
 						"type:wordpress-plugin",
 						"type:wordpress-muplugin"
 				]
 		}
-},
+	},
 	"scripts": {
 		
 	}

@@ -1,13 +1,15 @@
 <?php
 
+namespace Alquemie\CDP;
+
 /**
  * Register all actions and filters for the plugin
  *
  * @link       https://alquemie.net
  * @since      1.0.0
  *
- * @package    CDP_Analytics
- * @subpackage Plugin_Name/includes
+ * @package    Alquemie\CDP
+ * @subpackage Analytics\includes
  */
 
 /**
@@ -17,11 +19,11 @@
  * the plugin, and register them with the WordPress API. Call the
  * run function to execute the list of actions and filters.
  *
- * @package    CDP_Analytics
- * @subpackage Plugin_Name/includes
+ * @package    Alquemie\CDP
+ * @subpackage Analytics\includes
  * @author     Alquemie <support@alquemie.net>
  */
-class Plugin_Name_Loader {
+class Analytics_Loader {
 
 	/**
 	 * The array of actions registered with WordPress.

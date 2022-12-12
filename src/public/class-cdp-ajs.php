@@ -3,46 +3,41 @@
  * REQUIRED: Segment analytics.js
  *
  * @package     Alquemie\CDP
- * @since       1.0.0
  * @author      Chris Carrel
- * @link        https://segment.com
- * @license     GNU-2.0+
+ * @license     GNU-3.0+
  */
 
 namespace Alquemie\CDP;
 
-if ( ! class_exists( 'ajs' ) ) :
+if ( ! class_exists( 'AJS' ) ) :
 
-class ajs {
+class AJS {
     private $_settings;
+	private $plugin_name;
+	private $version;
 
-    public function __construct() {
+    public function __construct( $plugin_name, $version ) {
         $this->_settings = get_option( 'segment_keys' );
-        add_action( 'wp_head', array($this, 'addSegment'));
-        add_action( 'wp_enqueue_scripts', array($this,  'add_scripts') );
+        $this->plugin_name = $plugin_name;
+		$this->version = $version;
     }
 
     public function add_scripts() {
-        /*
-        $cdnDomain = (isset($this->_settings['segment_custom_domain']) && ($this->_settings['segment_custom_domain'] !== "")) ? $this->_settings['segment_custom_domain'] : "cdn.segment.com";
-        wp_enqueue_script('cdp-ajs', _get_plugin_url() . '/src/public/js/segment-ajs.js');
-        wp_localize_script('cdp-ajs', 'cdp_analytics', array(
-                'writeKey' => $this->_settings['segment_write_key'],
-                'cdn_host' => $cdnDomain
-            )
-        );
-        */
-
-        $trackEnabled = ( isset( $this->_settings['segment_tracklinks_enabled'] ) && $this->_settings['segment_tracklinks_enabled'] == "Y" ) ? "1" : "0";
-		$socialSelctor = isset( $this->_settings['segment_share_selector'] ) ? $this->_settings['segment_share_selector'] : 'data-share';
-        $newWindow = ( isset( $this->_settings['segment_ext_target_enabled'] ) && $this->_settings['segment_ext_target_enabled'] == "Y" ) ? "1" : "0";
-		
-         // global $post;
-         $terms_obj = get_the_category();
+        $campaignContext = ( isset( $this->_settings['cpd-campaign-context'] ) ) ? $this->_settings['cpd-campaign-context'] : 0;
+        $taxContext = ( isset( $this->_settings['cpd-page-taxonomy'] ) ) ? $this->_settings['cpd-page-taxonomy'] : 1;
+        $trackEnabled = ( isset( $this->_settings['cdp-track-links']['links-enabled'] ) ) ? $this->_settings['cdp-track-links']['links-enabled'] : 0;
+        $newWindow = isset( $this->_settings['cdp-track-links']['force-target'] ) ? $this->_settings['cdp-track-links']['force-target'] : 0;
+        $socialSelctor = isset( $this->_settings['cdp-track-links']['share-selector'] ) ? $this->_settings['cdp-track-links']['share-selector'] : "data-share";
+        $accordianEnabled = ( isset( $this->_settings['cdp-track-accordian']['accordian-enabled'])) ? $this->_settings['cdp-track-accordian']['accordian-enabled'] : "0";
+        $accordingEvent = ( isset( $this->_settings['cdp-track-accordian']['accordian-event'])) ? $this->_settings['cdp-track-accordian']['accordian-event'] : "Accordian Clicked";
+        $accordingSelector = ( isset( $this->_settings['cdp-track-accordian']['accordian-enabled'])) ? $this->_settings['cdp-track-accordian']['accordian-selector'] : ".accordian";
+        $videoEnabled = ( isset( $this->_settings['cdp-track-video']['video-enabled'])) ? $this->_settings['cdp-track-video']['video-enabled'] : "0";
+        // global $post;
+        $terms_obj = get_the_category();
         // $term_obj_list = get_the_terms( $post->ID, 'taxonomy' );
-         $categories = join(', ', wp_list_pluck($terms_obj, 'name'));
-         $terms_obj = get_the_tags();
-         $tags = join(', ', wp_list_pluck($terms_obj, 'name'));
+        $categories = join(', ', wp_list_pluck($terms_obj, 'name'));
+        $terms_obj = get_the_tags();
+        $tags = join(', ', wp_list_pluck($terms_obj, 'name'));
 
         $isDevMode = _is_in_development_mode();
         if ($isDevMode) {
@@ -54,10 +49,15 @@ class ajs {
         
         wp_enqueue_script( 'cdp-ajs-links', $jsFileURI , array('jquery') , null , true );
         wp_localize_script('cdp-ajs-links', 'cdp_analytics', array(
+            'campaign_context' => $campaignContext,
+            'taxonomy_context' => $taxContext,
             'track_links' => $trackEnabled,
-            'enable_youtube' => "1",
             'social_selector' => $socialSelctor,
             'force_new_window' => $newWindow,
+            'accordian_enable' => $accordianEnabled,
+            'accordian_event' => $accordingEvent,
+            'accordian_selector' => $accordingSelector,
+            'enable_video' => $videoEnabled,
             'categories' => $categories,
             'tags' => $tags
             )
@@ -90,5 +90,5 @@ class ajs {
 
 }
 
-new ajs;
+// new ajs;
 endif;

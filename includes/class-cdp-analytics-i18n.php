@@ -1,5 +1,7 @@
 <?php
 
+namespace Alquemie\CDP;
+
 /**
  * Define the internationalization functionality
  *
@@ -9,8 +11,8 @@
  * @link       https://alquemie.net
  * @since      1.0.0
  *
- * @package    CDP_Analytics
- * @subpackage Plugin_Name/includes
+ * @package    Alquemie\CDP
+ * @subpackage Analytics\includes
  */
 
 /**
@@ -20,11 +22,11 @@
  * so that it is ready for translation.
  *
  * @since      1.0.0
- * @package    CDP_Analytics
- * @subpackage Plugin_Name/includes
+ * @package    Alquemie\CDP
+ * @subpackage Analytics\includes
  * @author     Alquemie <support@alquemie.net>
  */
-class Plugin_Name_i18n {
+class Analytics_i18n {
 
 
 	/**

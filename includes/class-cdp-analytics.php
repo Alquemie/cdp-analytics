@@ -1,5 +1,7 @@
 <?php
 
+namespace Alquemie\CDP;
+
 /**
  * The file that defines the core plugin class
  *
@@ -9,8 +11,8 @@
  * @link       https://alquemie.net
  * @since      1.0.0
  *
- * @package    CDP_Analytics
- * @subpackage Plugin_Name/includes
+ * @package    Alquemie\CDP
+ * @subpackage Analytics\includes
  */
 
 /**
@@ -23,11 +25,11 @@
  * version of the plugin.
  *
  * @since      1.0.0
- * @package    CDP_Analytics
- * @subpackage Plugin_Name/includes
+ * @package    Alquemie\CDP
+ * @subpackage Analytics\includes
  * @author     Alquemie <support@alquemie.net>
  */
-class Plugin_Name {
+class Analytics {
 
 	/**
 	 * The loader that's responsible for maintaining and registering all hooks that power
@@ -66,19 +68,22 @@ class Plugin_Name {
 	 *
 	 * @since    1.0.0
 	 */
-	public function __construct() {
+	public function __construct($info) {
+		/*
 		if ( defined( 'PLUGIN_NAME_VERSION' ) ) {
 			$this->version = PLUGIN_NAME_VERSION;
 		} else {
 			$this->version = '1.0.0';
-		}
-		$this->plugin_name = 'plugin-name';
+		} 
+		*/
+
+		$this->version = $info['Version'];
+		$this->plugin_name = $info['Name'];
 
 		$this->load_dependencies();
-		$this->set_locale();
+		// $this->set_locale();
 		$this->define_admin_hooks();
 		$this->define_public_hooks();
-
 	}
 
 	/**
@@ -99,30 +104,23 @@ class Plugin_Name {
 	 */
 	private function load_dependencies() {
 
-		/**
-		 * The class responsible for orchestrating the actions and filters of the
-		 * core plugin.
-		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-plugin-name-loader.php';
+		$files = array(
+			// add the list of files to load here.
+			'lib/autoload.php',
+			// 'lib/qriouslad/codestar-framework/src/codestar-framework.php',
+			'includes/class-cdp-analytics-loader.php',
+			// 'includes/class-cdp-analytics-i18n.php',
+			'src/public/class-cdp-ajs.php',
+			'src/admin/class-cdp-analytics-admin.php',
+			// 'src/public/class-cdp-analytics.php',
+			// 'src/admin/class-cdp-settings.php'
+		);
+	
+		foreach ( $files as $file ) {
+			require _get_plugin_directory() . '/' . $file;
+		}
 
-		/**
-		 * The class responsible for defining internationalization functionality
-		 * of the plugin.
-		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-plugin-name-i18n.php';
-
-		/**
-		 * The class responsible for defining all actions that occur in the admin area.
-		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-plugin-name-admin.php';
-
-		/**
-		 * The class responsible for defining all actions that occur in the public-facing
-		 * side of the site.
-		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-plugin-name-public.php';
-
-		$this->loader = new Plugin_Name_Loader();
+		$this->loader = new Analytics_Loader();
 
 	}
 
@@ -137,7 +135,7 @@ class Plugin_Name {
 	 */
 	private function set_locale() {
 
-		$plugin_i18n = new Plugin_Name_i18n();
+		$plugin_i18n = new Analytics_i18n();
 
 		$this->loader->add_action( 'plugins_loaded', $plugin_i18n, 'load_plugin_textdomain' );
 
@@ -152,10 +150,12 @@ class Plugin_Name {
 	 */
 	private function define_admin_hooks() {
 
-		$plugin_admin = new Plugin_Name_Admin( $this->get_plugin_name(), $this->get_version() );
+		$plugin_admin = new Analytics_Admin( $this->get_plugin_name(), $this->get_version() );
 
-		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
-		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
+		$this->loader->add_action( 'admin_notices', $plugin_admin, 'writekey_missing_notice' );
+		$this->loader->add_action( 'plugins_loaded', $plugin_admin, 'settings_page' );
+		// $this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
+		// $this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
 
 	}
 
@@ -168,10 +168,12 @@ class Plugin_Name {
 	 */
 	private function define_public_hooks() {
 
-		$plugin_public = new Plugin_Name_Public( $this->get_plugin_name(), $this->get_version() );
-
-		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
-		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
+		$plugin_public = new AJS( $this->get_plugin_name(), $this->get_version() );
+		$this->loader->add_action( 'wp_head', $plugin_public, 'addSegment' );
+		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'add_scripts' );
+		
+		// $this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
+		// $this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
 
 	}
 
