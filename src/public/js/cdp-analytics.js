@@ -130,17 +130,20 @@ jQuery(document).ready(function($) {
 
 	if (cdp_analytics.accordian_enable == "1") {
 		$(cdp_analytics.accordian_selector).click(function() {
-			let acord = $(this);
-			let acordText = $(this).text();
-			if (acordText == "") {
+			// let acord = $(this);
+			let clickText = $(this).text();
+			if (clickText == "") {
 				var children = $(this).children;
 				for (var i = 0; i < children.length; i++) {
-					acordText = children[i].text();
-					if (acordText != "") break;
+					clickText = children[i].text();
+					if (clickText != "") break;
 				}
 			}
 
-			analytics.track(cdp_analytics.accordian_event, {} );
+			
+			analytics.track(cdp_analytics.accordian_event, {
+				"Text Clicked": (clickText == "") ? "UNKNOWN" : clickText
+			} );
 					return true;
 		});
 		
