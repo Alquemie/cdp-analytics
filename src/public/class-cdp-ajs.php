@@ -47,6 +47,10 @@ class AJS {
             $jsFileURI = _get_plugin_url() . '/dist/js/' . basename($jsFilePath[0]);
         }
         
+        if ($videoEnabled) {
+            wp_enqueue_script('youtube-iframe-api',"https://www.youtube.com/iframe_api", array(), null, false);
+        }
+
         wp_enqueue_script( 'cdp-ajs-links', $jsFileURI , array('jquery') , null , true );
         wp_localize_script('cdp-ajs-links', 'cdp_analytics', array(
             'campaign_context' => $campaignContext,
@@ -89,11 +93,15 @@ class AJS {
         }
       }
 
-    public function addSegmentYouTube() {
-      $segment = $this->_settings;
-      // Insert YouTube Library
+    public function addSegmentYouTube($html) {
+        $videoEnabled = ( isset( $this->_settings['cdp-track-video']['video-enabled'])) ? $this->_settings['cdp-track-video']['video-enabled'] : false;
+        // error_log("VIDEO: " . $videoEnabled);
+        if ( ($videoEnabled == true) && ( false !== strpos( $html, 'youtube' ) )) {
+            $html = str_replace( '?feature=oembed', '?feature=oembed&enablejsapi=1', $html );
+        }
+        return $html;
     }
-
+    
 }
 
 // new ajs;

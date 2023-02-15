@@ -167,15 +167,7 @@ class Analytics_Admin {
             'default' => "cdn.segment.com",
             'subtitle' => __( 'Contact friends@segment to configure a custom subdomain for the Segment CDN.', 'cdp-analytics' )
           ),
-          array(
-            'id'         => 'cpd-campaign-context',
-            'type'       => 'switcher',
-            'title'      => 'Include Campaign Context',
-            'text_on'    => 'Yes',
-            'text_off'   => 'No',
-            'subtitle' => __( 'The campaign context is part of a standard Page/Screen call to capture UTM parameters. Enabling this option will add the last touch campagin info to Track/Identify calls.', 'cdp-analytics' ),
-            'default' => true
-          ),
+          
 
         )
       ) );
@@ -197,6 +189,78 @@ class Analytics_Admin {
             'type'    => 'submessage',
             'style'   => 'info',
             'content' => 'Under Development',
+          ),
+        )
+      ) );
+
+      \CSF::createSection( $prefix, array(
+        'title'  => 'Ad Campaigns',
+        'fields' => array(
+          array(
+            'type'    => 'heading',
+            'content' => 'Ad Campaign',
+          ),
+          array(
+            'type'    => 'content',
+            'content' => 'Enhance calls with campaign data stored in local storage.',
+          ),
+          array(
+            'id'         => 'cdp-campaign-context',
+            'type'       => 'switcher',
+            'title'      => 'Include Campaign Context',
+            'text_on'    => 'Yes',
+            'text_off'   => 'No',
+            'subtitle' => __( 'The campaign context is part of a standard Page/Screen call to capture UTM parameters. Enabling this option will add the last touch campagin info to Track/Identify calls.', 'cdp-analytics' ),
+            'default' => true
+          ),
+          array(
+            'id'       => 'cdp-campaign-clickids',
+            'type'     => 'code_editor',
+            'title'    => 'Click ID JSON',
+            'settings' => array(
+              'theme'  => 'monokai',
+              'mode'   => 'javascript',
+            ),
+            'default'  => '{ 
+              "google": "gclid",
+              "facebook": "fbclid",
+              "twitter": "twclid",
+              "microsoft": "msclkid",
+              "snapchat": "sscid"
+              }',
+            'dependency' => array( 'cdp-campaign-context', '==', true ),
+          ),
+          array(
+            'id'        => 'cdp-enhanced-campaign-calls',
+            'type'      => 'fieldset',
+            'title'     => 'Add Enhanced Campaign Context',
+            'fields'    => array(
+              array(
+                'id'    => 'enhance-page',
+                'type'  => 'switcher',
+                'title' => 'Page',
+                'text_on'    => 'Yes',
+                'text_off'   => 'No',
+                'default' => true
+              ),
+              array(
+                'id'    => 'enhance-track',
+                'type'  => 'switcher',
+                'title' => 'Track',
+                'text_on'    => 'Yes',
+                'text_off'   => 'No',
+                'default' => false
+              ),
+              array(
+                'id'    => 'enhance-group',
+                'type'  => 'switcher',
+                'title' => 'Group',
+                'text_on'    => 'Yes',
+                'text_off'   => 'No',
+                'default' => false
+              ),
+            ),
+            'dependency' => array( 'cdp-campaign-context', '==', true ),
           ),
         )
       ) );

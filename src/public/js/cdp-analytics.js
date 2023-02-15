@@ -150,19 +150,27 @@ jQuery(document).ready(function($) {
 		console.log("CDP Analytics: Accordian Tracking");
 	}
 
+
+	if ( (typeof analytics !== 'undefined') && (cdp_analytics.taxonomy_context == "1" ) ) {
+	
+		const ADDWPTAX = function({ payload, next, integrations }) {
+			if (payload.obj.type == "page") {
+				if (cdp_analytics.categories != "") payload.obj.properties.categories = cdp_analytics.categories;
+				if (cdp_analytics.tags != "") payload.obj.properties.tags = cdp_analytics.tags;
+			}
+			next(payload);
+		};
+		analytics.addSourceMiddleware(ADDWPTAX);
+	
+	}
+	
+	if (cdp_analytics.enable_video == "1") {
+		window.onYouTubeIframeAPIReady = function() {
+			console.log("Prepare YouTube");
+		}
+		console.log("CDP Analytics: Video Tracking Enabled");
+	}
+	
 });
 
 
-
-if ( (typeof analytics !== 'undefined') && (cdp_analytics.taxonomy_context == "1" ) ) {
-	
-	const ADDWPTAX = function({ payload, next, integrations }) {
-		if (payload.obj.type == "page") {
-			if (cdp_analytics.categories != "") payload.obj.properties.categories = cdp_analytics.categories;
-			if (cdp_analytics.tags != "") payload.obj.properties.tags = cdp_analytics.tags;
-		}
-		next(payload);
-	};
-	analytics.addSourceMiddleware(ADDWPTAX);
-
-}

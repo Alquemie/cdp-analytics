@@ -5,7 +5,7 @@
         'type' => 'wordpress-plugin',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => '565de46e167b07edbabc41fcada17f20a5e92d91',
+        'reference' => 'ef037b7e5832cafcb02bc0ec6d52c1f822e3dcac',
         'name' => 'alquemie/cdp-analytics',
         'dev' => true,
     ),
@@ -16,7 +16,7 @@
             'type' => 'wordpress-plugin',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => '565de46e167b07edbabc41fcada17f20a5e92d91',
+            'reference' => 'ef037b7e5832cafcb02bc0ec6d52c1f822e3dcac',
             'dev_requirement' => false,
         ),
         'composer/installers' => array(
@@ -43,7 +43,7 @@
             'type' => 'metapackage',
             'install_path' => NULL,
             'aliases' => array(),
-            'reference' => 'a5d6404aa779f8c718f5e90164da5c37a6065aaf',
+            'reference' => 'bc35b8e9853346249e3adec090d33c6041fb2df4',
             'dev_requirement' => true,
         ),
         'segmentio/analytics-php' => array(
@@ -56,12 +56,12 @@
             'dev_requirement' => false,
         ),
         'woocommerce/action-scheduler' => array(
-            'pretty_version' => '3.5.3',
-            'version' => '3.5.3.0',
+            'pretty_version' => '3.5.4',
+            'version' => '3.5.4.0',
             'type' => 'wordpress-plugin',
             'install_path' => __DIR__ . '/../woocommerce/action-scheduler',
             'aliases' => array(),
-            'reference' => '63ef5af013ca3a6efdd8ef8e9363ac70778713cb',
+            'reference' => '9533e71b0eba4a519721dde84a34dfb161f11eb8',
             'dev_requirement' => false,
         ),
         'yahnis-elsts/plugin-update-checker' => array(
