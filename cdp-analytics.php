@@ -10,7 +10,7 @@ CDP Analytics (Segment) Connection for WordPress
 Plugin Name: CDP Analytics (Segment) for WP
 Plugin URI:  https://github.com/alquemie/cdp-analytics/
 Description: WordPress implementation of Segment analytics.js source with support for external link tracking.
-Version:     2.1.0
+Version:     2.1.1
 Author:      Chris Carrel
 Author URI:  https://www.linkedin.com/in/chriscarrel/
 Text Domain: cdp-analytics
@@ -94,7 +94,7 @@ require_once _get_plugin_directory() . '/includes/class-cdp-analytics.php';
 function launch() {
 	//$plugin_data = get_plugin_data( __FILE__ );
 	$plugin_data['Name'] = 'Alquemie_CDP_WP';
-	$plugin_data['Version'] = '2.1.0';
+	$plugin_data['Version'] = '2.1.1';
 	
 	$plugin = new Analytics($plugin_data);
 	$plugin->run();

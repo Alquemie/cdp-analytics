@@ -27,6 +27,7 @@ class AJS {
         $campaignTrack = ( isset( $this->_settings['cdp-campaign-calls']['enhance-track'] ) ) ? $this->_settings['cdp-campaign-calls']['enhance-track'] : 0;
         $campaignIdentify = ( isset( $this->_settings['cdp-campaign-calls']['enhance-identify'] ) ) ? $this->_settings['cdp-campaign-calls']['enhance-identify'] : 0;
         $campaignGroup = ( isset( $this->_settings['cdp-campaign-calls']['enhance-group'] ) ) ? $this->_settings['cdp-campaign-calls']['enhance-group'] : 0;
+        $campaignClickTracking = ( isset( $this->_settings['cdp-campaign-partners'] ) ) ? $this->_settings['cdp-campaign-partners'] : 0;
         $campaignAdvertisers = ( isset( $this->_settings['cdp-campaign-clickids'] ) ) ? $this->_settings['cdp-campaign-clickids'] : array();
         $taxContext = ( isset( $this->_settings['cdp-page-taxonomy'] ) ) ? $this->_settings['cdp-page-taxonomy'] : 1;
         $trackEnabled = ( isset( $this->_settings['cdp-track-links']['links-enabled'] ) ) ? $this->_settings['cdp-track-links']['links-enabled'] : 0;
@@ -61,6 +62,7 @@ class AJS {
             'campaign_track' => $campaignTrack,
             'campaign_identify' => $campaignIdentify,
             'campaign_group' => $campaignGroup,
+            'campaign_click_tracking' => $campaignClickTracking,
             'click_ids' => $campaignAdvertisers,
             'taxonomy_context' => $taxContext,
             'track_links' => $trackEnabled,

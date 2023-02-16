@@ -164,21 +164,29 @@ jQuery(document).ready(function($) {
 		console.log("CDP Analytics: Taxonomy Tracking Enabled");
 	}
 	
-	if ( (typeof analytics !== 'undefined') && (cdp_analytics.campaign_context == "1" ) ) {
+	if ( (typeof analytics !== 'undefined') && ( (cdp_analytics.campaign_click_tracking == "1" ) || (cdp_analytics.campaign_context == "1" ) ) ) {
+		
+		isExpired  = false;
 		expires = localStorage.getItem('cdp_analytics_expires');
 		if (expires != null) {
 			var rightNow = new Date();
-			if (rightNow > new Date(expires)) {
+			isExpired =(rightNow > new Date(expires)) ? true : false;
+		}
+
+		if ( isExpired || (cdp_analytics.campaign_context == "0" )) {
+		
 				localStorage.removeItem('cdp_analytics_properties');
 				localStorage.removeItem('cdp_analytics_referrer');
 				localStorage.removeItem('cdp_analytics_campaign');
 				localStorage.removeItem('cdp_analytics_expires');
 				console.log("Referral Expired " + expires);
-			}
 		}
 
+		let lastTouch = {};
+		let referralClick = {};
+		let propertyClick = {};
+
 		let checkURL = new URL(location.href);
-		let lastTouch = {}
 		for (const [key, value] of checkURL.searchParams) {
 			console.log(`${key}, ${value}`);
 			if (key == 'utm_medium') lastTouch.medium = value;
@@ -189,39 +197,37 @@ jQuery(document).ready(function($) {
 			if (key == 'utm_id') lastTouch.id = value;
 		}
 
-		cdp_analytics.click_ids.forEach(partner => {
-			/*
-			for (let key in partner) {
-				 console.log(`${key}: ${partner[key]}`);
-			}
-			*/
-			if (checkURL.searchParams.has(partner['opt-qs-param'])) {
-				if (Object.keys(lastTouch).length > 0) {
-					lastTouch[partner['opt-qs-param']] = checkURL.searchParams.get(partner['opt-qs-param']);
-				}
+		
+		if (cdp_analytics.campaign_click_tracking == "1" ) {
+			cdp_analytics.click_ids.forEach(partner => {
 
-				if (partner['opt-location'] == 'properties') {
-					enhancedCampaign = {
-						[partner['opt-qs-param']]: checkURL.searchParams.get(partner['opt-qs-param']),
-						"id": checkURL.searchParams.get(partner['opt-qs-param']),
-						"param": partner['opt-qs-param'],
-						"type": partner['opt-ad-platform']
-					};
-					localStorage.setItem('cdp_analytics_properties', JSON.stringify(enhancedCampaign));
-				} else {
-					enhancedCampaign = {
-						"id": checkURL.searchParams.get(partner['opt-qs-param']),
-						"type": partner['opt-ad-platform']
-					};
-					localStorage.setItem('cdp_analytics_referrer', JSON.stringify(enhancedCampaign));
+				if (checkURL.searchParams.has(partner['opt-qs-param'])) {
+					if (Object.keys(lastTouch).length > 0) {
+						lastTouch[partner['opt-qs-param']] = checkURL.searchParams.get(partner['opt-qs-param']);
+					}
+
+					if (partner['opt-location'] == 'properties') {
+						propertyClick = {
+							[partner['opt-qs-param']]: checkURL.searchParams.get(partner['opt-qs-param']),
+							"id": checkURL.searchParams.get(partner['opt-qs-param']),
+							"param": partner['opt-qs-param'],
+							"type": partner['opt-ad-platform']
+						};
+						localStorage.setItem('cdp_analytics_properties', JSON.stringify(propertyClick));
+					} else {
+						referralClick = {
+							"id": checkURL.searchParams.get(partner['opt-qs-param']),
+							"type": partner['opt-ad-platform']
+						};
+						localStorage.setItem('cdp_analytics_referrer', JSON.stringify(referralClick));
+					}
+
+					var expDate = new Date(); // Now
+					expDate.setDate(expDate.getDate() + 30);
+					localStorage.setItem('cdp_analytics_expires',expDate);
 				}
-				//if (checkURL.searchParams[partner['opt-qs-param']]) {
-				// console.log("Referred by: " + partner['opt-ad-platform']);
-				var expDate = new Date(); // Now
-				expDate.setDate(expDate.getDate() + 30);
-				localStorage.setItem('cdp_analytics_expires',expDate);
-			}
-		});
+			});
+		}
 
 		if (Object.keys(lastTouch).length > 0) {
 			localStorage.setItem('cdp_analytics_campaign', JSON.stringify(lastTouch));
@@ -229,8 +235,24 @@ jQuery(document).ready(function($) {
 
 		const ADDCAMP = function({ payload, next, integrations }) {
 			
-			if ( (payload.obj.type == "page") ||
-			( (payload.obj.type == "track") && (cdp_analytics.campaign_track == "1") ) ) {
+			if  (payload.obj.type == "page") {
+
+				if (Object.keys(lastTouch).length > 0) {
+					if (typeof payload.obj.context == 'undefined') payload.obj.context = {};
+					payload.obj.context.campaign = lastTouch;
+				}
+
+				if (Object.keys(referralClick).length > 0) {
+					if (typeof payload.obj.context == 'undefined') payload.obj.context = {};
+					payload.obj.context.referrer = referralClick;
+				}
+
+				if (Object.keys(propertyClick).length > 0) {
+					if (typeof payload.obj.properties == 'undefined') payload.obj.properties = {};
+					payload.obj.properties.referred_by = propertyClick;
+				}
+
+			} else if ( (cdp_analytics.campaign_context == "1" ) && (payload.obj.type == "track") && (cdp_analytics.campaign_track == "1") )  {
 				
 				referralValues = JSON.parse(localStorage.getItem('cdp_analytics_referrer'));
 				if ( (referralValues != null ) && (typeof referralValues.type !== 'undefined') ) {
@@ -238,9 +260,10 @@ jQuery(document).ready(function($) {
 					payload.obj.context.referrer = referralValues;
 				}
 
-				if (Object.keys(lastTouch).length > 0) {
+				campaginValues = JSON.parse(localStorage.getItem('cdp_analytics_campaign'));
+				if (campaginValues != null )   {
 					if (typeof payload.obj.context == 'undefined') payload.obj.context = {};
-					payload.obj.context.campaign = lastTouch;
+					payload.obj.context.campaign = campaginValues;
 				}
 
 			  propertyValues = JSON.parse(localStorage.getItem('cdp_analytics_properties'));
@@ -249,10 +272,8 @@ jQuery(document).ready(function($) {
 					payload.obj.properties.referred_by = propertyValues;
 				}
 			
-			}
-
-			if ( ( (payload.obj.type == "identify") && (cdp_analytics.campaign_identify == "1") ) ||
-				( (payload.obj.type == "group") && (cdp_analytics.campaign_group == "1") ) ) {
+			} else if ( ( (cdp_analytics.campaign_context == "1" ) && (payload.obj.type == "identify") && (cdp_analytics.campaign_identify == "1") ) ||
+				( (cdp_analytics.campaign_context == "1" ) && (payload.obj.type == "group") && (cdp_analytics.campaign_group == "1") ) ) {
 					
 					referralValues = JSON.parse(localStorage.getItem('cdp_analytics_referrer'));
 					if ( (referralValues != null ) && (typeof referralValues.type !== 'undefined') ) {
@@ -260,9 +281,10 @@ jQuery(document).ready(function($) {
 						payload.obj.context.referrer = referralValues;
 					}
 	
-					if (Object.keys(lastTouch).length > 0) {
+					campaginValues = JSON.parse(localStorage.getItem('cdp_analytics_campaign'));
+					if (campaginValues != null )   {
 						if (typeof payload.obj.context == 'undefined') payload.obj.context = {};
-						payload.obj.context.campaign = lastTouch;
+						payload.obj.context.campaign = campaginValues;
 					}
 
 					propertyValues = JSON.parse(localStorage.getItem('cdp_analytics_properties'));
