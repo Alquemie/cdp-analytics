@@ -23,8 +23,12 @@ class AJS {
     }
 
     public function add_scripts() {
-        $campaignContext = ( isset( $this->_settings['cpd-campaign-context'] ) ) ? $this->_settings['cpd-campaign-context'] : 0;
-        $taxContext = ( isset( $this->_settings['cpd-page-taxonomy'] ) ) ? $this->_settings['cpd-page-taxonomy'] : 1;
+        $campaignContext = ( isset( $this->_settings['cdp-campaign-context'] ) ) ? $this->_settings['cdp-campaign-context'] : 0;
+        $campaignTrack = ( isset( $this->_settings['cdp-campaign-calls']['enhance-track'] ) ) ? $this->_settings['cdp-campaign-calls']['enhance-track'] : 0;
+        $campaignIdentify = ( isset( $this->_settings['cdp-campaign-calls']['enhance-identify'] ) ) ? $this->_settings['cdp-campaign-calls']['enhance-identify'] : 0;
+        $campaignGroup = ( isset( $this->_settings['cdp-campaign-calls']['enhance-group'] ) ) ? $this->_settings['cdp-campaign-calls']['enhance-group'] : 0;
+        $campaignAdvertisers = ( isset( $this->_settings['cdp-campaign-clickids'] ) ) ? $this->_settings['cdp-campaign-clickids'] : array();
+        $taxContext = ( isset( $this->_settings['cdp-page-taxonomy'] ) ) ? $this->_settings['cdp-page-taxonomy'] : 1;
         $trackEnabled = ( isset( $this->_settings['cdp-track-links']['links-enabled'] ) ) ? $this->_settings['cdp-track-links']['links-enabled'] : 0;
         $newWindow = isset( $this->_settings['cdp-track-links']['force-target'] ) ? $this->_settings['cdp-track-links']['force-target'] : 0;
         $socialSelctor = isset( $this->_settings['cdp-track-links']['share-selector'] ) ? $this->_settings['cdp-track-links']['share-selector'] : "data-share";
@@ -54,6 +58,10 @@ class AJS {
         wp_enqueue_script( 'cdp-ajs-links', $jsFileURI , array('jquery') , null , true );
         wp_localize_script('cdp-ajs-links', 'cdp_analytics', array(
             'campaign_context' => $campaignContext,
+            'campaign_track' => $campaignTrack,
+            'campaign_identify' => $campaignIdentify,
+            'campaign_group' => $campaignGroup,
+            'click_ids' => $campaignAdvertisers,
             'taxonomy_context' => $taxContext,
             'track_links' => $trackEnabled,
             'social_selector' => $socialSelctor,
@@ -84,9 +92,12 @@ class AJS {
             } else if (is_404() && ($segment['cdp-page-404'] !== "")) {
                 echo "analytics.page('" . $segment['cdp-page-404'] . "');";
             } else {
-                echo "analytics.page();";
+                $usePretty = ( isset( $this->_settings['cdp-page-pretty-name'] ) ) ? $this->_settings['cdp-page-pretty-name'] : true;
+                $prettyPage = ($usePretty) ? the_title("'", "'", false) : "";
+                echo "analytics.page(" . $prettyPage . ");";
             }
             echo "}}();" . PHP_EOL;
+            echo "console.log('Analytics Code Loaded');"  . PHP_EOL;
             echo "</script>"  . PHP_EOL;
         } else {
             echo PHP_EOL ."<!-- CDP Analytics: Missing Segment WriteKey --->". PHP_EOL;

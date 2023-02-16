@@ -198,7 +198,7 @@ class Analytics_Admin {
         'fields' => array(
           array(
             'type'    => 'heading',
-            'content' => 'Ad Campaign',
+            'content' => 'Ad Campaigns',
           ),
           array(
             'type'    => 'content',
@@ -210,43 +210,26 @@ class Analytics_Admin {
             'title'      => 'Include Campaign Context',
             'text_on'    => 'Yes',
             'text_off'   => 'No',
-            'subtitle' => __( 'The campaign context is part of a standard Page/Screen call to capture UTM parameters. Enabling this option will add the last touch campagin info to Track/Identify calls.', 'cdp-analytics' ),
+            'subtitle' => __( 'The campaign context is part of a standard Page() call and includes the UTM query string parameters. Enabling this option will add the last touch campagin info to additional calls.', 'cdp-analytics' ),
             'default' => true
           ),
           array(
-            'id'       => 'cdp-campaign-clickids',
-            'type'     => 'code_editor',
-            'title'    => 'Click ID JSON',
-            'settings' => array(
-              'theme'  => 'monokai',
-              'mode'   => 'javascript',
-            ),
-            'default'  => '{ 
-              "google": "gclid",
-              "facebook": "fbclid",
-              "twitter": "twclid",
-              "microsoft": "msclkid",
-              "snapchat": "sscid"
-              }',
-            'dependency' => array( 'cdp-campaign-context', '==', true ),
-          ),
-          array(
-            'id'        => 'cdp-enhanced-campaign-calls',
+            'id'        => 'cdp-campaign-calls',
             'type'      => 'fieldset',
             'title'     => 'Add Enhanced Campaign Context',
             'fields'    => array(
               array(
-                'id'    => 'enhance-page',
-                'type'  => 'switcher',
-                'title' => 'Page',
-                'text_on'    => 'Yes',
-                'text_off'   => 'No',
-                'default' => true
-              ),
-              array(
                 'id'    => 'enhance-track',
                 'type'  => 'switcher',
                 'title' => 'Track',
+                'text_on'    => 'Yes',
+                'text_off'   => 'No',
+                'default' => false
+              ),
+              array(
+                'id'    => 'enhance-identify',
+                'type'  => 'switcher',
+                'title' => 'Identify',
                 'text_on'    => 'Yes',
                 'text_off'   => 'No',
                 'default' => false
@@ -262,6 +245,94 @@ class Analytics_Admin {
             ),
             'dependency' => array( 'cdp-campaign-context', '==', true ),
           ),
+          array(
+            'id'         => 'cdp-campaign-partners',
+            'type'       => 'switcher',
+            'title'      => 'Enable Click ID Tracking',
+            'text_on'    => 'Yes',
+            'text_off'   => 'No',
+            'subtitle' => __( 'Enable this to configure Click ID tracking (i.e. gclid, fbcid)', 'cdp-analytics' ),
+            'default' => true
+          ),
+          array(
+            'id'     => 'cdp-campaign-clickids',
+            'type'   => 'repeater',
+            'title'  => 'Advertising Tracking Parameters',
+            'subtitle' => __( 'Add the advertising partner and the relevant query string parameter that includes their tracking information.', 'cdp-analytics' ),
+            
+            'fields' => array(
+          
+              array(
+                'id'    => 'opt-ad-platform',
+                'type'  => 'text',
+                'title' => 'Advertiser',
+                'sanitize' => array($this, 'snakecase_value')
+              ),
+              array(
+                'id'    => 'opt-qs-param',
+                'type'  => 'text',
+                'title' => 'Query String Name',
+                'sanitize' => array($this, 'snakecase_value')
+              ),
+              array(
+                'id'         => 'opt-location',
+                'type'       => 'radio',
+                'title'      => 'Place info in...',
+                'options'    => array(
+                  'referer' => 'Context Referrer',
+                  'properties' => 'Properties',
+                ),
+                'default'    => 'referer'
+              ),
+            ),
+            'sanitize' => array($this, 'snakecase_value'),
+            'dependency' => array( 'cdp-campaign-partners', '==', true ),
+            'default'   => array(
+              array(
+                'opt-ad-platform' => 'google',
+                'opt-qs-param' => 'gclid',
+              ),
+              array(
+                'opt-ad-platform' => 'facebook',
+                'opt-qs-param' => 'fbclid',
+              ),
+              array(
+                'opt-ad-platform' => 'twitter',
+                'opt-qs-param' => 'twclid',
+              ),
+              array(
+                'opt-ad-platform' => 'microsoft',
+                'opt-qs-param' => 'msclkid',
+              ),
+              array(
+                'opt-ad-platform' => 'snapchat',
+                'opt-qs-param' => 'sscid',
+              )
+            )
+          ),
+          /*
+          array(
+            'id'       => 'cdp-campaign-clickids',
+            'type'     => 'code_editor',
+            'title'    => 'Click ID Values',
+            'subtitle' => __( 'Add the advertising partner and the relevant query string parameter that includes their tracking information.', 'cdp-analytics' ),
+            'settings' => array(
+              'theme'  => 'monokai',
+              'mode'   => 'javascript',
+            ),
+            'default'  => '
+{
+"google": "gclid",
+"facebook": "fbclid",
+"twitter": "twclid",
+"microsoft": "msclkid",
+"snapchat": "sscid"
+}
+              ',
+            'dependency' => array( 'cdp-campaign-context', '==', true ),
+          ),
+          */
+         
         )
       ) );
 
@@ -341,6 +412,15 @@ class Analytics_Admin {
             'content' => 'Modify properties sent with Segment <a href="https://segment.com/docs/connections/spec/page/" target="_blank">Page Call</a>.',
           ),
           array(
+            'id'         => 'cdp-page-pretty-name',
+            'type'       => 'switcher',
+            'title'      => 'Use Page Name',
+            'subtitle' => 'Include the WordPress Post Name in the analytics.page() <em>name</em> attribute.',
+            'text_on'    => 'Yes',
+            'text_off'   => 'No',
+            'default' => true
+          ),
+          array(
             'id'    => 'cdp-page-home',
             'type'  => 'text',
             'title' => 'Home Page Name',
@@ -351,7 +431,7 @@ class Analytics_Admin {
             'title' => '404 Page Name',
           ),
           array(
-            'id'         => 'cpd-page-taxonomy',
+            'id'         => 'cdp-page-taxonomy',
             'type'       => 'switcher',
             'title'      => 'Include Taxonomy Context',
             'subtitle' => 'Enhance the page call to include WordPress categories and tags in the page context.',
@@ -360,7 +440,7 @@ class Analytics_Admin {
             'default' => true
           ),
           array(
-            'id'         => 'cpd-page-server',
+            'id'         => 'cdp-page-server',
             'type'       => 'switcher',
             'title'      => 'Track Server Side',
             'text_on'    => 'Yes',
@@ -484,7 +564,7 @@ class Analytics_Admin {
               ),
           ),
           array(
-            'id'         => 'cpd-track-server',
+            'id'         => 'cdp-track-server',
             'type'       => 'switcher',
             'title'      => 'Track Server Side',
             'text_on'    => 'Yes',
@@ -555,6 +635,27 @@ class Analytics_Admin {
     $all_options = get_option( 'segment_keys' );
     echo "<pre>" . print_r($all_options, true) . "</pre>";
   }
+
+  public function snakecase_value( $value ) {
+      if (is_array($value)) {
+        error_log(print_r($value, true));
+        /*
+        for ($i = 0; $i < count($value); $i++)  {
+          if (is_array($value[$i])) {
+            $value[$i] = $this->snakecase_value($value[$i]);
+          } else {
+            $value[$i] = strtolower(str_replace( ' ', '_', $value[$i] ));
+          }
+        }
+        */
+        $value =  array_map( array( $this, 'snakecase_value'), $value );
+        return ($value);
+      } else {
+        return strtolower(str_replace( ' ', '_', $value ));
+      }
+      
+    }
+
 	/**
 	 * Register the stylesheets for the admin area.
 	 *

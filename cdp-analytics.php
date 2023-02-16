@@ -92,8 +92,10 @@ require_once _get_plugin_directory() . '/includes/class-cdp-analytics.php';
  * Begins execution of the plugin.
  */
 function launch() {
-	$plugin_data = get_plugin_data( __FILE__ );
-
+	//$plugin_data = get_plugin_data( __FILE__ );
+	$plugin_data['Name'] = 'Alquemie_CDP_WP';
+	$plugin_data['Version'] = '2.1.0';
+	
 	$plugin = new Analytics($plugin_data);
 	$plugin->run();
 

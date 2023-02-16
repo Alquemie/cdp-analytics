@@ -22,7 +22,6 @@ if ( (typeof analytics == 'undefined') && (typeof jQuery != 'undefined') ) {
 			}).attr({target: "_blank", rel: "external", }); 
 		}
 		
-
 		jQuery("a").click( function() {
 	// jQuery('body').on('click', 'a', function(event) {
 			var el = jQuery(this);

@@ -161,9 +161,125 @@ jQuery(document).ready(function($) {
 			next(payload);
 		};
 		analytics.addSourceMiddleware(ADDWPTAX);
-	
+		console.log("CDP Analytics: Taxonomy Tracking Enabled");
 	}
 	
+	if ( (typeof analytics !== 'undefined') && (cdp_analytics.campaign_context == "1" ) ) {
+		expires = localStorage.getItem('cdp_analytics_expires');
+		if (expires != null) {
+			var rightNow = new Date();
+			if (rightNow > new Date(expires)) {
+				localStorage.removeItem('cdp_analytics_properties');
+				localStorage.removeItem('cdp_analytics_referrer');
+				localStorage.removeItem('cdp_analytics_campaign');
+				localStorage.removeItem('cdp_analytics_expires');
+				console.log("Referral Expired " + expires);
+			}
+		}
+
+		let checkURL = new URL(location.href);
+		let lastTouch = {}
+		for (const [key, value] of checkURL.searchParams) {
+			console.log(`${key}, ${value}`);
+			if (key == 'utm_medium') lastTouch.medium = value;
+			if (key == 'utm_source') lastTouch.source = value;
+			if (key == 'utm_campaign') lastTouch.campaign = value;
+			if (key == 'utm_content') lastTouch.content = value;
+			if (key == 'utm_term') lastTouch.term = value;
+			if (key == 'utm_id') lastTouch.id = value;
+		}
+
+		cdp_analytics.click_ids.forEach(partner => {
+			/*
+			for (let key in partner) {
+				 console.log(`${key}: ${partner[key]}`);
+			}
+			*/
+			if (checkURL.searchParams.has(partner['opt-qs-param'])) {
+				if (Object.keys(lastTouch).length > 0) {
+					lastTouch[partner['opt-qs-param']] = checkURL.searchParams.get(partner['opt-qs-param']);
+				}
+
+				if (partner['opt-location'] == 'properties') {
+					enhancedCampaign = {
+						[partner['opt-qs-param']]: checkURL.searchParams.get(partner['opt-qs-param']),
+						"id": checkURL.searchParams.get(partner['opt-qs-param']),
+						"param": partner['opt-qs-param'],
+						"type": partner['opt-ad-platform']
+					};
+					localStorage.setItem('cdp_analytics_properties', JSON.stringify(enhancedCampaign));
+				} else {
+					enhancedCampaign = {
+						"id": checkURL.searchParams.get(partner['opt-qs-param']),
+						"type": partner['opt-ad-platform']
+					};
+					localStorage.setItem('cdp_analytics_referrer', JSON.stringify(enhancedCampaign));
+				}
+				//if (checkURL.searchParams[partner['opt-qs-param']]) {
+				// console.log("Referred by: " + partner['opt-ad-platform']);
+				var expDate = new Date(); // Now
+				expDate.setDate(expDate.getDate() + 30);
+				localStorage.setItem('cdp_analytics_expires',expDate);
+			}
+		});
+
+		if (Object.keys(lastTouch).length > 0) {
+			localStorage.setItem('cdp_analytics_campaign', JSON.stringify(lastTouch));
+		}
+
+		const ADDCAMP = function({ payload, next, integrations }) {
+			
+			if ( (payload.obj.type == "page") ||
+			( (payload.obj.type == "track") && (cdp_analytics.campaign_track == "1") ) ) {
+				
+				referralValues = JSON.parse(localStorage.getItem('cdp_analytics_referrer'));
+				if ( (referralValues != null ) && (typeof referralValues.type !== 'undefined') ) {
+					if (typeof payload.obj.context == 'undefined') payload.obj.context = {};
+					payload.obj.context.referrer = referralValues;
+				}
+
+				if (Object.keys(lastTouch).length > 0) {
+					if (typeof payload.obj.context == 'undefined') payload.obj.context = {};
+					payload.obj.context.campaign = lastTouch;
+				}
+
+			  propertyValues = JSON.parse(localStorage.getItem('cdp_analytics_properties'));
+				if ( (propertyValues != null ) && (typeof propertyValues.type != 'undefined') ) {
+					if (typeof payload.obj.properties == 'undefined') payload.obj.properties = {};
+					payload.obj.properties.referred_by = propertyValues;
+				}
+			
+			}
+
+			if ( ( (payload.obj.type == "identify") && (cdp_analytics.campaign_identify == "1") ) ||
+				( (payload.obj.type == "group") && (cdp_analytics.campaign_group == "1") ) ) {
+					
+					referralValues = JSON.parse(localStorage.getItem('cdp_analytics_referrer'));
+					if ( (referralValues != null ) && (typeof referralValues.type !== 'undefined') ) {
+						if (typeof payload.obj.context == 'undefined') payload.obj.context = {};
+						payload.obj.context.referrer = referralValues;
+					}
+	
+					if (Object.keys(lastTouch).length > 0) {
+						if (typeof payload.obj.context == 'undefined') payload.obj.context = {};
+						payload.obj.context.campaign = lastTouch;
+					}
+
+					propertyValues = JSON.parse(localStorage.getItem('cdp_analytics_properties'));
+					if ( (propertyValues != null ) && (typeof propertyValues.type != 'undefined') ) {
+						if (typeof payload.obj.traits == 'undefined') payload.obj.traits = {};
+						payload.obj.traits.referred_by = propertyValues;
+					}
+
+			}
+
+			next(payload);
+		};
+
+		analytics.addSourceMiddleware(ADDCAMP);
+		console.log("CDP Analytics: Campaign Enhancement Enabled");
+	}
+
 	if (cdp_analytics.enable_video == "1") {
 		window.onYouTubeIframeAPIReady = function() {
 			console.log("Prepare YouTube");
