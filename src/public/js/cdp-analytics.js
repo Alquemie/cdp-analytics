@@ -188,7 +188,7 @@ jQuery(document).ready(function($) {
 
 		let checkURL = new URL(location.href);
 		for (const [key, value] of checkURL.searchParams) {
-			console.log(`${key}, ${value}`);
+			// console.log(`${key}, ${value}`);
 			if (key == 'utm_medium') lastTouch.medium = value;
 			if (key == 'utm_source') lastTouch.source = value;
 			if (key == 'utm_campaign') lastTouch.campaign = value;
@@ -209,7 +209,7 @@ jQuery(document).ready(function($) {
 					if (partner['opt-location'] == 'properties') {
 						propertyClick = {
 							[partner['opt-qs-param']]: checkURL.searchParams.get(partner['opt-qs-param']),
-							"id": checkURL.searchParams.get(partner['opt-qs-param']),
+							// "id": checkURL.searchParams.get(partner['opt-qs-param']),
 							"param": partner['opt-qs-param'],
 							"type": partner['opt-ad-platform']
 						};
