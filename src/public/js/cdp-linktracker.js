@@ -4,13 +4,15 @@ ajsTrackLinkCallback = function(destUrl) {
 
 class cdpAlqLinkTracker { 
   #settings;
-  #defaults = {"taxonomy_context":"1","track_links":"1","social_selector":"[data-share]","force_new_window":"1","accordian_enable":"0","accordian_event":"Accordian Clicked","accordian_selector":"","enable_video":"0","categories":"","tags":""};
+  #defaults = {"taxonomy_context":"1","track_links":"1","social_selector":"[data-share]","force_new_window":"1","accordian_enable":"0","accordian_event":"Accordian Clicked","accordian_selector":"","enable_video":"0","categories":"","tags":"", "dev_mode": "false"};
+  #devMode;
 
   constructor(siteSettings = {}) {
     this.#settings = { ...this.#defaults, ...siteSettings };
+    this.#devMode = this.#settings.dev_mode;
     this.enableLinkTracking();
     this.enableAccordianTracking();
-    // console.log(this.#campaign);
+    if (this.#devMode) console.log(this.#settings);
   };
 
   trackSocialShare = function(href, lnk) {
@@ -162,7 +164,7 @@ class cdpAlqLinkTracker {
 }
 
 jQuery(document).ready(function($) {
-	if ((typeof analytics !== 'undefined') && (cdp_analytics.campaign_click_tracking == "1" )) {
+	if ((typeof analytics !== 'undefined') && (cdp_analytics.track_links == "1" )) {
     alqLinkTrackingCDP = new cdpAlqLinkTracker(cdp_analytics);
   }
 });

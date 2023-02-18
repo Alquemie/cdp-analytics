@@ -5,7 +5,7 @@ class cdpAlqCampaignTracker {
   #newvisit = false;
   #partner = {};
   #settings
-  #defaults = { qsp: { campaign:'utm_campaign', source:  'utm_source', medium: 'utm_medium', term: 'utm_term', content: 'utm_content', matchtype: 'matchtype',}, cookieLife: 30 };
+  #defaults = { qsp: { campaign:'utm_campaign', source:  'utm_source', medium: 'utm_medium', term: 'utm_term', content: 'utm_content', matchtype: 'matchtype',}, cookieLife: 30, "campaign_click_tracking": "1" };
   #adKeys = {  "cid": { "partner": "unknow", "location": "referrer" }, "gclid": { "partner": "google", "location": "referrer" }, "transaction_id": { "partner": "everflow", "location": "referrer" }, "fbclid": { "partner": "facebook", "location": "referrer" }, "gclsrc": { "partner": "doubleclick", "location": "referrer" }, "mkwid": { "partner": "marin", "location": "referrer" }, "pcrid": { "partner": "marin", "location": "properties" }, "msclkid": { "partner": "bing", "location": "referrer" }, "epik": { "partner": "pintrest", "location": "referrer" }, "igshid": { "partner": "instagram", "location": "referrer" }, "gum_id": { "partner": "criteo", "location": "referrer" }, "irclickid": { "partner": "impact", "location": "referrer" }, "ttd_id": { "partner": "tradedisk", "location": "referrer" }, "clickid": { "partner": "taboola", "location": "referrer" }, "twclid": { "partner": "twitter", "location": "referrer" }, "scclid": { "partner": "snapshot", "location": "referrer" }, "ttclid": { "partner": "tiktok", "location": "referrer" }, "vmcid": { "partner": "yahoo", "location": "referrer" }, "sp_camp": { "partner": "amazon", "location": "referrer" }, "ar_camid": { "partner": "adroll", "location": "referrer" }, "cmpid": { "partner": "gemini", "location": "referrer" }, "OutbrainClickId": { "partner": "outbrain", "location": "referrer" } };
 
   constructor(siteSettings = {}, adKeys = {}) {
@@ -48,7 +48,7 @@ class cdpAlqCampaignTracker {
       // console.log(`${key}, ${value}`);
       let cs = this.getKeyByValue(this.#settings.qsp, key);
       if (typeof cs == 'undefined') {
-        if (typeof this.#settings.adKeys[key] != 'undefined') {
+        if ( (typeof this.#settings.adKeys[key] != 'undefined') && (this.#settings.campaign_click_tracking) ) {
           this.#newvisit = true;
           this.#partner.name = (this.#settings.adKeys[key].partner != 'undefined') ? this.#settings.adKeys[key].partner : "undefined";
           this.#partner.location = (this.#settings.adKeys[key].location != 'undefined') ? this.#settings.adKeys[key].location : "properties";
@@ -153,7 +153,7 @@ class cdpAlqCampaignTracker {
 (function () {
   if ( (typeof analytics !== 'undefined') && (cdp_analytics.campaign_context == "1" ) ) {
 	
-    var mw = new cdpAlqCampaignTracker({}, cdp_ad_keys );
+    var mw = new cdpAlqCampaignTracker(cdp_analytics, cdp_ad_keys );
     
     const ALQUEHANCECAMP = function({ payload, next, integrations }) {
       userCamp = mw.current();

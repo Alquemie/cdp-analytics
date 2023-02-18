@@ -74,6 +74,7 @@ class AJS {
 
         wp_enqueue_script( 'cdp-ajs-links', $jsFileURI , array('jquery') , null , true );
         wp_localize_script('cdp-ajs-links', 'cdp_analytics', array(
+            'dev_mode' => $isDevMode,
             'campaign_context' => $campaignContext,
             'campaign_track' => $campaignTrack,
             'campaign_identify' => $campaignIdentify,
