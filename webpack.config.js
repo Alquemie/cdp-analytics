@@ -1,5 +1,6 @@
 // Require path.
 const { CleanWebpackPlugin } = require('clean-webpack-plugin'); // installed via npm
+const CopyPlugin = require('copy-webpack-plugin');
 const webpack = require('webpack'); //to access built-in plugins
 const path = require( 'path' );
 
@@ -9,7 +10,7 @@ const config = {
 	// One for frontend and one for the admin area.
 	entry: {
 		// frontend and admin will replace the [name] portion of the output config below.
-		public: './src/public/js/cdp-analytics.js',
+		public: './src/public/js/cdp-public.js',
 		// ajs: './src/public/js/segment-ajs.js',
 		admin: './src/admin/js/admin-cdp.js'
 	},
@@ -40,6 +41,11 @@ const config = {
   plugins: [
     new webpack.ProgressPlugin(),
     new CleanWebpackPlugin({cleanOnceBeforeBuildPatterns: ['**/*.js','**/*.css','**/.DS_Store','!index.php'],}),
+		new CopyPlugin({
+      patterns: [
+        { from: path.resolve( __dirname, 'src/static/' ), to: path.resolve( __dirname, 'dist/static/' ) },
+      ],
+    }),
     // new HtmlWebpackPlugin({ template: './src/index.html' }),
 ],
 }

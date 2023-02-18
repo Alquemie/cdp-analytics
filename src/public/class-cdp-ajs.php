@@ -37,6 +37,14 @@ class AJS {
         $accordingEvent = ( isset( $this->_settings['cdp-track-accordian']['accordian-event'])) ? $this->_settings['cdp-track-accordian']['accordian-event'] : "Accordian Clicked";
         $accordingSelector = ( isset( $this->_settings['cdp-track-accordian']['accordian-enabled'])) ? $this->_settings['cdp-track-accordian']['accordian-selector'] : ".accordian";
         $videoEnabled = ( isset( $this->_settings['cdp-track-video']['video-enabled'])) ? $this->_settings['cdp-track-video']['video-enabled'] : "0";
+        $consentMgrEnabled = ( isset( $this->_settings['cdp-consent-manager'])) ? $this->_settings['cdp-consent-manager'] : "0";
+        // {"opt-ad-platform":"google","opt-qs-param":"gclid","opt-location":"referer"}
+        $clickIds = array();
+
+        foreach ($campaignAdvertisers as $partner) {
+            $clickIds[$partner['opt-qs-param']] = array( "partner" => $partner['opt-ad-platform'], "location" => $partner['opt-location']);
+        }
+
         // global $post;
         $terms_obj = get_the_category();
         // $term_obj_list = get_the_terms( $post->ID, 'taxonomy' );
@@ -44,9 +52,14 @@ class AJS {
         $terms_obj = get_the_tags();
         $tags = join(', ', wp_list_pluck($terms_obj, 'name'));
 
+        wp_enqueue_script( 'js-cookie', _get_plugin_url() . '/dist/static/js.cookie.min.js', null , null , true );
+
         $isDevMode = _is_in_development_mode();
         if ($isDevMode) {
-            $jsFileURI = _get_plugin_url() . '/src/public/js/cdp-analytics.js';
+            $jsFileURI = _get_plugin_url() . '/src/public/js/cdp-taxonomy.js';
+            wp_enqueue_script( 'cdp-ajs-campaigntracker', _get_plugin_url() . '/src/public/js/cdp-campaigntracker.js' , array('jquery', 'cdp-ajs-links') , null , true );
+            wp_enqueue_script( 'cdp-ajs-linktracker', _get_plugin_url() . '/src/public/js/cdp-linktracker.js' , array('jquery', 'cdp-ajs-links') , null , true );
+           //  wp_enqueue_script( 'cdp-ajs-links', $jsFileURI , array('jquery', 'cdp-ajs-links') , null , true );
         } else {
             $jsFilePath = glob( _get_plugin_directory() . '/dist/js/public.*.js' );
             $jsFileURI = _get_plugin_url() . '/dist/js/' . basename($jsFilePath[0]);
@@ -54,6 +67,9 @@ class AJS {
         
         if ($videoEnabled) {
             wp_enqueue_script('youtube-iframe-api',"https://www.youtube.com/iframe_api", array(), null, false);
+        }
+        if ($consentMgrEnabled) {
+            wp_enqueue_script('segment-consent-mgr',"https://unpkg.com/@segment/consent-manager@5.3.0/standalone/consent-manager.js", array(), null, false);
         }
 
         wp_enqueue_script( 'cdp-ajs-links', $jsFileURI , array('jquery') , null , true );
@@ -63,7 +79,6 @@ class AJS {
             'campaign_identify' => $campaignIdentify,
             'campaign_group' => $campaignGroup,
             'campaign_click_tracking' => $campaignClickTracking,
-            'click_ids' => $campaignAdvertisers,
             'taxonomy_context' => $taxContext,
             'track_links' => $trackEnabled,
             'social_selector' => $socialSelctor,
@@ -76,6 +91,7 @@ class AJS {
             'tags' => $tags
             )
         );
+        wp_localize_script('cdp-ajs-links', 'cdp_ad_keys', $clickIds );
     }
 
 
@@ -115,6 +131,32 @@ class AJS {
             $html = str_replace( '?feature=oembed', '?feature=oembed&enablejsapi=1', $html );
         }
         return $html;
+    }
+    
+    public function add_enqueue_script_attributes( $tag, $handle ) {
+        // Add defer
+        if( 'segment-consent-mgr' === $handle ) {
+             return str_replace( ' src="', ' defer src="', $tag );
+        }
+    
+        // Add async
+/*
+        if( 'another-handle' === $handle ) {
+             return str_replace( ' src="', ' async src="', $tag );
+        }
+
+        // Add multiple defers
+        $deferrable_handles = [
+            'first-handle',
+            'second-handle',
+            'third-handle',
+        ];
+    
+        if( in_array( $handle, $deferrable_handles ) ) {
+            return str_replace( ' src="', ' defer src="', $tag );
+        }
+*/
+        return $tag;
     }
     
 }

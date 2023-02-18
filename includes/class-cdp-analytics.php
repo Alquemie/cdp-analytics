@@ -164,7 +164,8 @@ class Analytics {
 		$this->loader->add_action( 'wp_head', $plugin_public, 'addSegment' );
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'add_scripts' );
 		$this->loader->add_filter( 'oembed_result', $plugin_public, 'addSegmentYouTube', 10, 1 );
-
+		$this->loader->add_filter( 'script_loader_tag', $plugin_public, 'add_enqueue_script_attributes', 10, 2 );
+		
 		// add_filter( 'oembed_result', 'addSegmentYouTube', 10, 1 );
 		// $this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
 		// $this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );

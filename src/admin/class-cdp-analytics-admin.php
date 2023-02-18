@@ -190,7 +190,7 @@ class Analytics_Admin {
             'style'   => 'info',
             'content' => 'Under Development',
           ),
-          array(
+          /*array(
             'id'         => 'cdp-consent-manager',
             'type'       => 'switcher',
             'title'      => 'Enable Drop-in Consent Manager',
@@ -198,7 +198,7 @@ class Analytics_Admin {
             'text_off'   => 'No',
             'subtitle' => __( 'Visit <a href="https://github.com/segmentio/consent-manager" target="_blank">Segment\'s GitHub</a> for more information.', 'cdp-analytics' ),
             'default' => false
-          ),
+          ), */
         )
       ) );
 
@@ -288,7 +288,7 @@ class Analytics_Admin {
                 'type'       => 'radio',
                 'title'      => 'Place info in...',
                 'options'    => array(
-                  'referer' => 'Context Referrer',
+                  'referrer' => 'Context Referrer',
                   'properties' => 'Properties',
                 ),
                 'default'    => 'referer'
