@@ -5,7 +5,7 @@ class cdpAlqCampaignTracker {
   #newvisit = false;
   #partner = {};
   #settings
-  #defaults = { qsp: { campaign:'utm_campaign', source:  'utm_source', medium: 'utm_medium', term: 'utm_term', content: 'utm_content', matchtype: 'matchtype',}, cookieLife: 30, "campaign_click_tracking": "1" };
+  #defaults = { qsp: { campaign:'utm_campaign', source:  'utm_source', medium: 'utm_medium', term: 'utm_term', content: 'utm_content', matchtype: 'matchtype',}, cookieLife: 30, "dev_mode":"0","campaign_context":"1","campaign_track":"1","campaign_identify":"0","campaign_group":"0","campaign_partner_tracking":"1" };
   #adKeys = {  "cid": { "partner": "unknow", "location": "referrer" }, "gclid": { "partner": "google", "location": "referrer" }, "transaction_id": { "partner": "everflow", "location": "referrer" }, "fbclid": { "partner": "facebook", "location": "referrer" }, "gclsrc": { "partner": "doubleclick", "location": "referrer" }, "mkwid": { "partner": "marin", "location": "referrer" }, "pcrid": { "partner": "marin", "location": "properties" }, "msclkid": { "partner": "bing", "location": "referrer" }, "epik": { "partner": "pintrest", "location": "referrer" }, "igshid": { "partner": "instagram", "location": "referrer" }, "gum_id": { "partner": "criteo", "location": "referrer" }, "irclickid": { "partner": "impact", "location": "referrer" }, "ttd_id": { "partner": "tradedisk", "location": "referrer" }, "clickid": { "partner": "taboola", "location": "referrer" }, "twclid": { "partner": "twitter", "location": "referrer" }, "scclid": { "partner": "snapshot", "location": "referrer" }, "ttclid": { "partner": "tiktok", "location": "referrer" }, "vmcid": { "partner": "yahoo", "location": "referrer" }, "sp_camp": { "partner": "amazon", "location": "referrer" }, "ar_camid": { "partner": "adroll", "location": "referrer" }, "cmpid": { "partner": "gemini", "location": "referrer" }, "OutbrainClickId": { "partner": "outbrain", "location": "referrer" } };
 
   constructor(siteSettings = {}, adKeys = {}) {
@@ -25,7 +25,8 @@ class cdpAlqCampaignTracker {
     return { "newvist": this.#newvisit,
       "campaign": this.#campaign, 
       "partner": this.#partner, 
-      "ga4_client": this.#ga4client 
+      "ga4_client": this.#ga4client,
+      "settings": this.#settings 
     };
   };
 
@@ -48,7 +49,7 @@ class cdpAlqCampaignTracker {
       // console.log(`${key}, ${value}`);
       let cs = this.getKeyByValue(this.#settings.qsp, key);
       if (typeof cs == 'undefined') {
-        if ( (typeof this.#settings.adKeys[key] != 'undefined') && (this.#settings.campaign_click_tracking) ) {
+        if ( (typeof this.#settings.adKeys[key] != 'undefined') && (this.#settings.campaign_partner_tracking) ) {
           this.#newvisit = true;
           this.#partner.name = (this.#settings.adKeys[key].partner != 'undefined') ? this.#settings.adKeys[key].partner : "undefined";
           this.#partner.location = (this.#settings.adKeys[key].location != 'undefined') ? this.#settings.adKeys[key].location : "properties";
@@ -182,9 +183,38 @@ class cdpAlqCampaignTracker {
         if (userCamp.ga4_client != null) {
           payload.obj.properties.ga4_clientId = userCamp.ga4_client;
         }
-      } else if ( (payload.obj.type == "track") && (userCamp.ga4_client != null) ) {
+      } else if (payload.obj.type == "track") { 
         if (typeof payload.obj.properties == 'undefined') payload.obj.properties = {};
-        payload.obj.properties.ga4_clientId = userCamp.ga4_client;
+        if (userCamp.ga4_client != null) payload.obj.properties.ga4_clientId = userCamp.ga4_client;
+        if (userCamp.settings.campaign_track) {
+          if (Object.keys(userCamp.campaign).length > 0) {
+            payload.obj.properties.last_touch = userCamp.campaign;
+            payload.obj.properties.last_touch.updated = userCamp.newvist;
+          }
+          if (Object.keys(userCamp.partner).length > 0)  {
+            payload.obj.properties.ad_network = userCamp.partner;
+          }
+        }
+      } else if ((userCamp.settings.campaign_identify) && (payload.obj.type == "identify")) { 
+        if (typeof payload.obj.traits == 'undefined') payload.obj.traits = {};
+        if (userCamp.ga4_client != null) payload.obj.traits.ga4_clientId = userCamp.ga4_client;
+        if ((Object.keys(userCamp.campaign).length > 0)) {
+          payload.obj.traits.last_touch = userCamp.campaign;
+          payload.obj.traits.last_touch.updated = userCamp.newvist;
+        }
+        if (Object.keys(userCamp.partner).length > 0)  {
+          payload.obj.traits.ad_network = userCamp.partner;
+        }
+      } else if ((userCamp.settings.campaign_group) && (payload.obj.type == "identify")) { 
+        if (typeof payload.obj.traits == 'undefined') payload.obj.traits = {};
+        if (userCamp.ga4_client != null) payload.obj.traits.ga4_clientId = userCamp.ga4_client;
+        if ((Object.keys(userCamp.campaign).length > 0)) {
+          payload.obj.traits.last_touch = userCamp.campaign;
+          payload.obj.traits.last_touch.updated = userCamp.newvist;
+        }
+        if (Object.keys(userCamp.partner).length > 0)  {
+          payload.obj.traits.ad_network = userCamp.partner;
+        }
       } 
 
       next(payload);
