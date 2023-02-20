@@ -1,7 +1,7 @@
 
 class cdpAlqCampaignTracker {
   #ga4client = null;
-  #campaign = null;
+  #campaign = {};
   #newvisit = false;
   #partner = {};
   #settings
@@ -37,8 +37,8 @@ class cdpAlqCampaignTracker {
       let lastTouch = JSON.parse(lastCamp);
       // this.#campaign = (Object.keys(lastTouch.campaign).length > 0) ? lastTouch.campaign : null;
       // this.#partner =  (Object.keys(lastTouch.partner).length > 0) ? lastTouch.partner : null;
-      this.#campaign = (typeof lastTouch.campaign != 'undefined') ? lastTouch.campaign : null;
-      this.#partner = (typeof lastTouch.partner != 'undefined') ? lastTouch.partner : null;
+      this.#campaign = ((typeof lastTouch.campaign != 'undefined') && (lastTouch.campaign != null) ) ? lastTouch.campaign : {};
+      this.#partner = ((typeof lastTouch.partner != 'undefined')  && (lastTouch.partner != null) ) ? lastTouch.partner : {};
     }
 
     this.getCookies();
@@ -64,7 +64,7 @@ class cdpAlqCampaignTracker {
         currentCampagin[`${cs}`] = value;
       }
     }
-    if ( (Object.keys(currentCampagin) == 0 ) && (this.#campaign == null) ) {
+    if ( (Object.keys(currentCampagin) == 0 ) && (Object.keys(this.#campaign) == 0 ) ) {
     // if (typeof currentCampagin.campaign == 'undefined') {
       let source = '';
       let campaign = '';
@@ -90,7 +90,7 @@ class cdpAlqCampaignTracker {
         "content": ""
       };
     }
-    if (typeof currentCampagin.campaign !== 'undefined')  {
+    if (Object.keys(currentCampagin) > 0 )  {
       this.#campaign = currentCampagin;
     }
     
@@ -140,15 +140,15 @@ class cdpAlqCampaignTracker {
   getCookies() {
     // Fall back to cookies if values are not in local storage
     if (typeof Cookies != 'undefined') {
-      if (this.#campaign == null) {
+      if (Object.keys(this.#campaign) == 0) {
         let lastCamp = Cookies.get('alq_cdp_ajs_camp');
         
         if ((typeof lastCamp != 'undefined') && (lastCamp != null)) {
           let lastTouch = JSON.parse(lastCamp);
           // this.#campaign = (Object.keys(lastTouch.campaign).length > 0) ? lastTouch.campaign : null;
           // this.#partner =  (Object.keys(lastTouch.partner).length > 0) ? lastTouch.partner : null;
-          this.#campaign = (typeof lastTouch.campaign != 'undefined') ? lastTouch.campaign : null;
-          this.#partner = (typeof lastTouch.partner != 'undefined') ? lastTouch.partner : null;
+          this.#campaign = ((typeof lastTouch.campaign != 'undefined') && (lastTouch.campaign != null) ) ? lastTouch.campaign : {};
+          this.#partner = ((typeof lastTouch.partner != 'undefined')  && (lastTouch.partner != null) ) ? lastTouch.partner : {};
         }
       }
     }
@@ -168,7 +168,6 @@ class cdpAlqCampaignTracker {
 
         if (Object.keys(userCamp.campaign).length > 0) {
           if (typeof payload.obj.context == 'undefined') payload.obj.context = {};
-          // payload.obj.context.campaign = userCamp.campaign;
           payload.obj.properties.last_touch = userCamp.campaign;
           payload.obj.properties.last_touch.updated = userCamp.newvist;
         }
