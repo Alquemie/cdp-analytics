@@ -35,8 +35,10 @@ class cdpAlqCampaignTracker {
 
     if ((typeof lastCamp != 'undefined') && (lastCamp != null)) {
       let lastTouch = JSON.parse(lastCamp);
-      this.#campaign = (Object.keys(lastTouch.campaign).length > 0) ? lastTouch.campaign : null;
-      this.#partner =  (Object.keys(lastTouch.partner).length > 0) ? lastTouch.partner : null;
+      // this.#campaign = (Object.keys(lastTouch.campaign).length > 0) ? lastTouch.campaign : null;
+      // this.#partner =  (Object.keys(lastTouch.partner).length > 0) ? lastTouch.partner : null;
+      this.#campaign = (typeof lastTouch.campaign != 'undefined') ? lastTouch.campaign : null;
+      this.#partner = (typeof lastTouch.partner != 'undefined') ? lastTouch.partner : null;
     }
 
     this.getCookies();
@@ -62,7 +64,7 @@ class cdpAlqCampaignTracker {
         currentCampagin[`${cs}`] = value;
       }
     }
-    if ( (typeof currentCampagin.campaign == 'undefined') && (this.#campaign == null) ) {
+    if ( (Object.keys(currentCampagin) == 0 ) && (this.#campaign == null) ) {
     // if (typeof currentCampagin.campaign == 'undefined') {
       let source = '';
       let campaign = '';
@@ -143,8 +145,10 @@ class cdpAlqCampaignTracker {
         
         if ((typeof lastCamp != 'undefined') && (lastCamp != null)) {
           let lastTouch = JSON.parse(lastCamp);
-          this.#campaign = (Object.keys(lastTouch.campaign).length > 0) ? lastTouch.campaign : null;
-          this.#partner =  (Object.keys(lastTouch.partner).length > 0) ? lastTouch.partner : null;
+          // this.#campaign = (Object.keys(lastTouch.campaign).length > 0) ? lastTouch.campaign : null;
+          // this.#partner =  (Object.keys(lastTouch.partner).length > 0) ? lastTouch.partner : null;
+          this.#campaign = (typeof lastTouch.campaign != 'undefined') ? lastTouch.campaign : null;
+          this.#partner = (typeof lastTouch.partner != 'undefined') ? lastTouch.partner : null;
         }
       }
     }

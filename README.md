@@ -18,6 +18,10 @@
 4. Ability to add 'Content Shared' track call on social share buttons
 
 ### Change Log
+#### v2.2.0
+- Added campaign and ad click tracking
+- Updated code to prevent library conflicts
+
 #### v1.6.0
 - Added Category, Tag tracking to AJS Page Context
 
