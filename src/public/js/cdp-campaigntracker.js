@@ -64,7 +64,7 @@
           currentCampagin[`${cs}`] = value;
         }
       }
-      if ( (Object.keys(currentCampagin) == 0 ) && (Object.keys(this.#campaign) == 0 ) ) {
+      if ( (Object.keys(currentCampagin).length == 0 ) && (Object.keys(this.#campaign).length == 0 ) ) {
       // if (typeof currentCampagin.campaign == 'undefined') {
         let source = '';
         let campaign = '';
@@ -90,7 +90,7 @@
           "content": ""
         };
       }
-      if (Object.keys(currentCampagin) > 0 )  {
+      if (Object.keys(currentCampagin).length > 0 )  {
         this.#campaign = currentCampagin;
       }
       
@@ -104,7 +104,8 @@
     
     storeCampaign() {
       // console.log("Campaign -> " + JSON.stringify(campaignObj));
-      if (this.#campaign.campaign != '') {
+      // if (this.#campaign.campaign != '') {
+      if (Object.keys(this.#campaign).length > 0) {
         let lastTouch = {
           "campaign": this.#campaign,
           "partner": this.#partner
