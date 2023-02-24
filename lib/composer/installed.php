@@ -1,22 +1,22 @@
 <?php return array(
     'root' => array(
-        'pretty_version' => '2.x-dev',
-        'version' => '2.9999999.9999999.9999999-dev',
+        'pretty_version' => 'dev-main',
+        'version' => 'dev-main',
         'type' => 'wordpress-plugin',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => 'ef037b7e5832cafcb02bc0ec6d52c1f822e3dcac',
+        'reference' => '417929e9b56d1f2aeedf99fe29b057dbf0f69534',
         'name' => 'alquemie/cdp-analytics',
         'dev' => true,
     ),
     'versions' => array(
         'alquemie/cdp-analytics' => array(
-            'pretty_version' => '2.x-dev',
-            'version' => '2.9999999.9999999.9999999-dev',
+            'pretty_version' => 'dev-main',
+            'version' => 'dev-main',
             'type' => 'wordpress-plugin',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => 'ef037b7e5832cafcb02bc0ec6d52c1f822e3dcac',
+            'reference' => '417929e9b56d1f2aeedf99fe29b057dbf0f69534',
             'dev_requirement' => false,
         ),
         'composer/installers' => array(
@@ -35,7 +35,7 @@
             'install_path' => __DIR__ . '/../qriouslad/codestar-framework',
             'aliases' => array(),
             'reference' => '715d17045008833eada8d7bddabd3363326094fa',
-            'dev_requirement' => false,
+            'dev_requirement' => true,
         ),
         'roave/security-advisories' => array(
             'pretty_version' => 'dev-master',
@@ -43,7 +43,7 @@
             'type' => 'metapackage',
             'install_path' => NULL,
             'aliases' => array(),
-            'reference' => 'bc35b8e9853346249e3adec090d33c6041fb2df4',
+            'reference' => '6bd8aa4cc5a5871008d89e503ac4ae7b69b5ac33',
             'dev_requirement' => true,
         ),
         'segmentio/analytics-php' => array(
@@ -53,7 +53,7 @@
             'install_path' => __DIR__ . '/../segmentio/analytics-php',
             'aliases' => array(),
             'reference' => '2ed390d1c1e03328f3d5b6c43a72a4ce6a8e7f85',
-            'dev_requirement' => false,
+            'dev_requirement' => true,
         ),
         'woocommerce/action-scheduler' => array(
             'pretty_version' => '3.5.4',
@@ -62,7 +62,7 @@
             'install_path' => __DIR__ . '/../woocommerce/action-scheduler',
             'aliases' => array(),
             'reference' => '9533e71b0eba4a519721dde84a34dfb161f11eb8',
-            'dev_requirement' => false,
+            'dev_requirement' => true,
         ),
         'yahnis-elsts/plugin-update-checker' => array(
             'pretty_version' => 'v5.0',
@@ -71,7 +71,7 @@
             'install_path' => __DIR__ . '/../yahnis-elsts/plugin-update-checker',
             'aliases' => array(),
             'reference' => '81be284da76f12c8751b477b2a0fa44364d26f84',
-            'dev_requirement' => false,
+            'dev_requirement' => true,
         ),
     ),
 );

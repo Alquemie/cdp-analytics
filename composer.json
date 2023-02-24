@@ -17,14 +17,14 @@
 	},
 	"require": {
 		"php": "^7.4|^8",
-		"composer/installers": "^2.0",
+		"composer/installers": "^2.0"
+	},
+	"require-dev": {
+		"roave/security-advisories": "dev-master",
 		"segmentio/analytics-php": "^3.5",
 		"woocommerce/action-scheduler": "^3.5",
 		"yahnis-elsts/plugin-update-checker": "^5.0",
 		"qriouslad/codestar-framework": "^2.2.8"
-	},
-	"require-dev": {
-		"roave/security-advisories": "dev-master"
 	},
 	"config": {
 		"sort-order": true,
