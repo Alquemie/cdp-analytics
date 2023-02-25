@@ -40,8 +40,8 @@ class cdpAlqCampaignTracker {
 
     if ((typeof lastCamp != 'undefined') && (lastCamp != null)) {
       let lastTouch = JSON.parse(lastCamp);
-      this.#campaign = (lastTouch.campaign != null) && (Object.keys(lastTouch.campaign).length > 0) ? lastTouch.campaign : null;
-      this.#partner =  (lastTouch.partner != null) && (Object.keys(lastTouch.partner).length > 0) ? lastTouch.partner : null;
+      this.#campaign = (lastTouch.campaign != null) && (Object.keys(lastTouch.campaign).length > 0) ? lastTouch.campaign : {};
+      this.#partner =  (lastTouch.partner != null) && (Object.keys(lastTouch.partner).length > 0) ? lastTouch.partner : {};
     }
 
     this.getCookies();
@@ -56,7 +56,7 @@ class cdpAlqCampaignTracker {
       if (typeof cs == 'undefined') {
         if ( (typeof this.#settings.adKeys[key] != 'undefined') && (this.#settings.campaign_partner_tracking) ) {
           this.#newpart = true;
-          this.#partner.name = (this.#settings.adKeys[key].partner != 'undefined') ? this.#settings.adKeys[key].partner : "undefined";
+          this.#partner.name = (this.#settings.adKeys[key].partner != 'undefined') ? this.#settings.adKeys[key].partner : "unknown";
           this.#partner.location = (this.#settings.adKeys[key].location != 'undefined') ? this.#settings.adKeys[key].location : "properties";
           this.#partner.key = key;
           this.#partner.id = value;
@@ -167,8 +167,8 @@ class cdpAlqCampaignTracker {
         
         if ((typeof lastCamp != 'undefined') && (lastCamp != null)) {
           let lastTouch = JSON.parse(lastCamp);
-          this.#campaign = (Object.keys(lastTouch.campaign).length > 0) ? lastTouch.campaign : null;
-          this.#partner =  (Object.keys(lastTouch.partner).length > 0) ? lastTouch.partner : null;
+          this.#campaign = (Object.keys(lastTouch.campaign).length > 0) ? lastTouch.campaign : {};
+          this.#partner =  (Object.keys(lastTouch.partner).length > 0) ? lastTouch.partner : {};
         }
       }
     }
