@@ -19,7 +19,7 @@
 
 ### Change Log
 #### v2.2.5
-- Fixes to Link tracking
+- Fixes to accordian tracking
   
 #### v2.2.4
 - Fixes to click tracking
