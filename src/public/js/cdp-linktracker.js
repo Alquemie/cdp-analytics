@@ -141,7 +141,7 @@ class cdpAlqLinkTracker {
 
   enableAccordianTracking() {
     if (this.#settings.accordian_enable == "1") {
-      jQuery(this.#settings.accordian_selector).click(function() {
+      jQuery(this.#settings.accordian_selector).click(function(eventName = this.#settings.accordian_event) {
         // let acord = jQuery(this);
         let clickText = jQuery(this).text().trim();
         if (clickText == "") {
@@ -152,7 +152,7 @@ class cdpAlqLinkTracker {
           }
         }
   
-        analytics.track(this.#settings.accordian_event, {
+        analytics.track(eventName, {
           "Text Clicked": (clickText == "") ? "UNKNOWN" : clickText
         } );
             return true;

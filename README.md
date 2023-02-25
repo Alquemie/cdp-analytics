@@ -18,6 +18,9 @@
 4. Ability to add 'Content Shared' track call on social share buttons
 
 ### Change Log
+#### v2.2.5
+- Fixes to Link tracking
+  
 #### v2.2.4
 - Fixes to click tracking
   
