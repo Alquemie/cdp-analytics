@@ -139,10 +139,14 @@ class cdpAlqLinkTracker {
     // console.log("CDP Analytics: Link Tracking Completed");
   };
 
+  accordianEvent() {
+    return this.#settings.accordian_event;
+  }
   enableAccordianTracking() {
     if (this.#settings.accordian_enable == "1") {
-      jQuery(this.#settings.accordian_selector).click(function(eventName = this.#settings.accordian_event) {
-        // let acord = jQuery(this);
+      var parent = this;
+      jQuery(this.#settings.accordian_selector).click(function() {
+
         let clickText = jQuery(this).text().trim();
         if (clickText == "") {
           var children = jQuery(this).children;
@@ -152,7 +156,7 @@ class cdpAlqLinkTracker {
           }
         }
   
-        analytics.track(eventName, {
+        analytics.track(parent.accordianEvent(), {
           "Text Clicked": (clickText == "") ? "UNKNOWN" : clickText
         } );
             return true;
