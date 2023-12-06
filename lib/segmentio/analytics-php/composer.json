@@ -1,6 +1,5 @@
 {
 	"name": "segmentio/analytics-php",
-	"version": "3.5.0",
 	"description": "Segment Analytics PHP Library",
 	"keywords": [
 		"analytics",
@@ -35,8 +34,12 @@
 	},
 	"autoload": {
 		"psr-4": {
-			"Segment\\Test\\": "test/",
 			"Segment\\": "lib/"
+		}
+	},
+	"autoload-dev": {
+		"psr-4": {
+			"Segment\\Test\\": "test/"
 		}
 	},
 	"bin": [
@@ -53,10 +56,8 @@
 	},
 	"config": {
 		"allow-plugins": {
-			"third-party/required-plugin": true,
 			"segmentio/*": true,
-			"dealerdirect/phpcodesniffer-composer-installer": true,
-			"unnecessary/plugin": false
+			"dealerdirect/phpcodesniffer-composer-installer": true
 		}
 	}
 }

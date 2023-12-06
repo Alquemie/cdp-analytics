@@ -7,13 +7,12 @@ namespace Composer\Autoload;
 class ComposerStaticInitab30dd02396bab4ef3a75171dd5e6a18
 {
     public static $files = array (
-        '5ff2501974ebd86c0be698ddfca6451e' => __DIR__ . '/..' . '/yahnis-elsts/plugin-update-checker/load-v5p0.php',
+        '45a16669595eb3c0a9e2994e57fc3188' => __DIR__ . '/..' . '/yahnis-elsts/plugin-update-checker/load-v5p3.php',
     );
 
     public static $prefixLengthsPsr4 = array (
         'S' => 
         array (
-            'Segment\\Test\\' => 13,
             'Segment\\' => 8,
         ),
         'C' => 
@@ -23,10 +22,6 @@ class ComposerStaticInitab30dd02396bab4ef3a75171dd5e6a18
     );
 
     public static $prefixDirsPsr4 = array (
-        'Segment\\Test\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/segmentio/analytics-php/test',
-        ),
         'Segment\\' => 
         array (
             0 => __DIR__ . '/..' . '/segmentio/analytics-php/lib',

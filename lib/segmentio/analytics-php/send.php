@@ -8,7 +8,7 @@ use Segment\Segment;
  * require client
  */
 
-require './vendor/autoload.php';
+require __DIR__ . '/bootstrap.php';
 
 /**
  * Args

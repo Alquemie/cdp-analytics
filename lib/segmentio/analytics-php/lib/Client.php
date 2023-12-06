@@ -108,6 +108,8 @@ class Client
      */
     private function getDefaultContext(): array
     {
+        require __DIR__ . '/Version.php';
+
         global $SEGMENT_VERSION;
 
         return [
