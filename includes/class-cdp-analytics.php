@@ -143,11 +143,24 @@ class Analytics {
 	private function define_admin_hooks() {
 
 		$plugin_admin = new Analytics_Admin( $this->get_plugin_name(), $this->get_version() );
+		$this->loader->add_action( 'cdp_source_map_refresh', $plugin_admin, 'buildCampaignSourceMap' );
 
 		$this->loader->add_action( 'admin_notices', $plugin_admin, 'writekey_missing_notice' );
 		$this->loader->add_action( 'plugins_loaded', $plugin_admin, 'settings_page' );
+		$this->loader->add_filter( 'upload_mimes',  $plugin_admin, 'add_json_upload_mimes' );
+		$this->loader->add_action( 'csf_segment_keys_save_after', $plugin_admin, 'resetCronJob' );
+		$this->loader->add_filter( 'cron_schedules', $plugin_admin, 'cron_add_frequencies' );
+		
 		// $this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		// $this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
+		add_filter('wp_check_filetype_and_ext', function ($data, $file, $filename, $mimes) {
+			$filetype = wp_check_filetype($filename, $mimes);
+			return [
+			'ext'             => $filetype['ext'],
+			'type'            => $filetype['type'],
+			'proper_filename' => $data['proper_filename']
+			];
+		}, 10, 4);
 
 	}
 

@@ -79,16 +79,19 @@ class cdpAlqCampaignTracker {
         if (a.hostname != location.hostname) {
           source = a.hostname;
           campaign = 'seo';
-
-          currentCampagin = {
-            "campaign": campaign,
-            "source": source.toLowerCase()
-          }
         }
 
       } catch(e) {
         console.log(e.message);
       }
+
+      currentCampagin = {
+        "campaign": campaign,
+        "source": source.toLowerCase(),
+        "medium": "",
+        "term": "",
+        "content": ""
+      };
     }
     
     // if (typeof currentCampagin.campaign !== 'undefined')  {
@@ -105,11 +108,14 @@ class cdpAlqCampaignTracker {
   }
 	
   storeCampaign() {
-
-    let lastTouch = {};
-    if (Object.keys(this.#campaign).length > 0) lastTouch.campaign = this.#campaign;
-    if (Object.keys(this.#partner).length > 0) lastTouch.partner = this.#partner;
-    if (Object.keys(lastTouch).length > 0) {
+    // console.log("Campaign -> " + JSON.stringify(campaignObj));
+    // if (this.#campaign.campaign != '') {
+    if (Object.keys(this.#campaign).length > 0) {
+      let lastTouch = {
+        "campaign": this.#campaign,
+        "partner": this.#partner
+      };
+      
       localStorage.setItem('alq_cdp_ajs_camp', JSON.stringify(lastTouch));
       this.setCookies(lastTouch);
     }
@@ -169,7 +175,7 @@ class cdpAlqCampaignTracker {
   }
 };
 
-(function () {
+document.addEventListener("DOMContentLoaded", () => {
   if ( (typeof analytics !== 'undefined') && (cdp_analytics.campaign_context == "1" ) ) {
 	
     var mw = new cdpAlqCampaignTracker(cdp_analytics, cdp_ad_keys );
@@ -250,4 +256,4 @@ class cdpAlqCampaignTracker {
 
     analytics.addSourceMiddleware(ALQUEHANCECAMP);
   }
-}());
+});

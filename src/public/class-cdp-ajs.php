@@ -29,6 +29,8 @@ class AJS {
         $campaignGroup = ( isset( $this->_settings['cdp-campaign-calls']['enhance-group'] ) ) ? $this->_settings['cdp-campaign-calls']['enhance-group'] : 0;
         $campaignPartnerTracking = ( isset( $this->_settings['cdp-campaign-partners'] ) ) ? $this->_settings['cdp-campaign-partners'] : 0;
         $campaignAdvertisers = ( isset( $this->_settings['cdp-campaign-clickids'] ) ) ? $this->_settings['cdp-campaign-clickids'] : array();
+        $campaignNormalize = ( isset( $this->_settings['cdp-campaign-normalize'] ) ) ? $this->_settings['cdp-campaign-normalize'] : 0;
+        $campaignSourceMedium = ( isset( $this->_settings['cdp-normalize-settings']['cdp-campaign-source-map'] ) ) ? $this->_settings['cdp-normalize-settings']['cdp-campaign-source-map'] : "";
         $taxContext = ( isset( $this->_settings['cdp-page-taxonomy'] ) ) ? $this->_settings['cdp-page-taxonomy'] : 1;
         $trackEnabled = ( isset( $this->_settings['cdp-track-links']['links-enabled'] ) ) ? $this->_settings['cdp-track-links']['links-enabled'] : 0;
         $newWindow = isset( $this->_settings['cdp-track-links']['force-target'] ) ? $this->_settings['cdp-track-links']['force-target'] : 0;
@@ -42,9 +44,22 @@ class AJS {
         $clickIds = array();
 
         foreach ($campaignAdvertisers as $partner) {
-            $clickIds[$partner['opt-qs-param']] = array( "partner" => $partner['opt-ad-platform'], "location" => $partner['opt-location']);
+            $local = (isset($partner['opt-location'])) ? $partner['opt-location'] : 'properties';
+            $clickIds[$partner['opt-qs-param']] = array( "partner" => $partner['opt-ad-platform'], "location" => $local);
         }
 
+        $sources = array();
+        if ($campaignSourceMedium != "") {
+            $srcArray = array_map('str_getcsv', explode("\n", $campaignSourceMedium));
+            foreach ($srcArray as $src) {
+                if (count($src) > 2) {
+                    $sources[strtolower($src[0])] = array("source" => $src[1], "medium" => $src[2]);
+                } else {
+                    $sources[strtolower($src[0])] = array("source" => $src[1]);
+                }
+            }
+        }
+       
         // global $post;
         $terms_obj = get_the_category();
         // $term_obj_list = get_the_terms( $post->ID, 'taxonomy' );
@@ -57,8 +72,11 @@ class AJS {
         $isDevMode = _is_in_development_mode();
         if ($isDevMode) {
             $jsFileURI = _get_plugin_url() . '/src/public/js/cdp-taxonomy.js';
-            wp_enqueue_script( 'cdp-ajs-campaigntracker', _get_plugin_url() . '/src/public/js/cdp-campaigntracker.js' , array('jquery', 'cdp-ajs-links') , null , true );
+            wp_enqueue_script( 'cdp-ajs-sources', _get_plugin_url() . '/src/public/js/cdp-source.js' , array('jquery', 'cdp-ajs-links') , null , true );
+
+            wp_enqueue_script( 'cdp-ajs-campaigntracker', _get_plugin_url() . '/src/public/js/cdp-campaigntracker.js' , array('jquery', 'cdp-ajs-links', 'cdp-ajs-sources') , null , true );
             wp_enqueue_script( 'cdp-ajs-linktracker', _get_plugin_url() . '/src/public/js/cdp-linktracker.js' , array('jquery', 'cdp-ajs-links') , null , true );
+            
            //  wp_enqueue_script( 'cdp-ajs-links', $jsFileURI , array('jquery', 'cdp-ajs-links') , null , true );
         } else {
             $jsFilePath = glob( _get_plugin_directory() . '/dist/js/public.*.js' );
@@ -80,6 +98,7 @@ class AJS {
             'campaign_identify' => $campaignIdentify,
             'campaign_group' => $campaignGroup,
             'campaign_partner_tracking' => $campaignPartnerTracking,
+            'campaign_normalize' => $campaignNormalize,
             'taxonomy_context' => $taxContext,
             'track_links' => $trackEnabled,
             'social_selector' => $socialSelctor,
@@ -93,6 +112,7 @@ class AJS {
             )
         );
         wp_localize_script('cdp-ajs-links', 'cdp_ad_keys', $clickIds );
+        wp_localize_script('cdp-ajs-links', 'cdp_utm_map', $sources );
     }
 
 
@@ -102,11 +122,19 @@ class AJS {
   
         if ( isset( $segment['segment_write_key'] ) ) {
             $writeKey = $segment['segment_write_key'];
-            $subdomain = (isset($segment['segment_custom_domain']) && ($segment['segment_custom_domain'] !== "")) ? $segment['segment_custom_domain'] : "cdn.segment.com";
+            
+            $subdomain = '"https://cdn.segment.com/analytics.js/v1/" + key + "/analytics.min.js"';
+            if (($segment['segment_enable_edgesdk'] == "enabled") && isset($segment['segment_custom_domain']) && ($segment['segment_custom_domain'] !== "") ) {
+                $sdkPrefix = (isset($segment['segment_edgesdk_prefix']) && ($segment['segment_edgesdk_prefix'] !== "") ) ? $segment['segment_edgesdk_prefix'] : "magic";
+                $uuid = (isset($segment['segment_edgesdk_uuid']) && ($segment['segment_edgesdk_uuid'] !== "")) ? $segment['segment_edgesdk_uuid'] : uniqid();
+                
+                $subdomain =  '"https://' . $segment['segment_custom_domain'] .'/' . $sdkPrefix . '/ajs/' . $uuid . '"';
+            }
+    
             $enableConsentMgr = ( isset( $segment['cdp-consent-manager'] ) ) ? $segment['cdp-consent-manager'] : 0;
         
             echo "<script>" . PHP_EOL;
-            echo '!function(){var analytics=window.analytics=window.analytics||[];if(!analytics.initialize)if(analytics.invoked)window.console&&console.error&&console.error("Segment snippet included twice.");else{analytics.invoked=!0;analytics.methods=["trackSubmit","trackClick","trackLink","trackForm","pageview","identify","reset","group","track","ready","alias","debug","page","once","off","on","addSourceMiddleware","addIntegrationMiddleware","setAnonymousId","addDestinationMiddleware"];analytics.factory=function(e){return function(){var t=Array.prototype.slice.call(arguments);t.unshift(e);analytics.push(t);return analytics}};for(var e=0;e<analytics.methods.length;e++){var key=analytics.methods[e];analytics[key]=analytics.factory(key)}analytics.load=function(key,e){var t=document.createElement("script");t.type="text/javascript";t.async=!0;t.src="https://' . $subdomain . '/analytics.js/v1/" + key + "/analytics.min.js";var n=document.getElementsByTagName("script")[0];n.parentNode.insertBefore(t,n);analytics._loadOptions=e};analytics._writeKey="' . $writeKey . '";;analytics.SNIPPET_VERSION="4.15.3";';
+            echo '!function(){var i="analytics",analytics=window[i]=window[i]||[];if(!analytics.initialize)if(analytics.invoked)window.console&&console.error&&console.error("Segment snippet included twice.");else{analytics.invoked=!0;analytics.methods=["trackSubmit","trackClick","trackLink","trackForm","pageview","identify","reset","group","track","ready","alias","debug","page","screen","once","off","on","addSourceMiddleware","addIntegrationMiddleware","setAnonymousId","addDestinationMiddleware","register"];analytics.factory=function(e){return function(){if(window[i].initialized)return window[i][e].apply(window[i],arguments);var n=Array.prototype.slice.call(arguments);if(["track","screen","alias","group","page","identify"].indexOf(e)>-1){var c=document.querySelector("link[rel=\'canonical\']");n.push({__t:"bpc",c:c&&c.getAttribute("href")||void 0,p:location.pathname,u:location.href,s:location.search,t:document.title,r:document.referrer})}n.unshift(e);analytics.push(n);return analytics}};for(var n=0;n<analytics.methods.length;n++){var key=analytics.methods[n];analytics[key]=analytics.factory(key)}analytics.load=function(key,n){var t=document.createElement("script");t.type="text/javascript";t.async=!0;t.setAttribute("data-global-segment-analytics-key",i);t.src=' . $subdomain . ';var r=document.getElementsByTagName("script")[0];r.parentNode.insertBefore(t,r);analytics._loadOptions=n};analytics._writeKey="' . $writeKey .'";;analytics.SNIPPET_VERSION="5.2.0";';
             if (!$enableConsentMgr) echo 'analytics.load("' . $writeKey . '");';
             if (is_front_page() && ($segment['cdp-page-home'] !== "")) {
                 echo "analytics.page('" . $segment['cdp-page-home'] . "');";

@@ -167,7 +167,7 @@ class cdpAlqLinkTracker {
   }
 }
 
-jQuery(document).ready(function($) {
+document.addEventListener("DOMContentLoaded", () => {
 	if ((typeof analytics !== 'undefined') && (cdp_analytics.track_links == "1" )) {
     alqLinkTrackingCDP = new cdpAlqLinkTracker(cdp_analytics);
   }

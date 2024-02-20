@@ -10,7 +10,7 @@ CDP Analytics (Segment) Connection for WordPress
 Plugin Name: CDP Analytics (Segment) for WP
 Plugin URI:  https://github.com/alquemie/cdp-analytics/
 Description: WordPress implementation of Segment analytics.js source with support for external link tracking.
-Version:     2.2.5
+Version:     2.3.0
 Author:      Chris Carrel
 Author URI:  https://www.linkedin.com/in/chriscarrel/
 Text Domain: cdp-analytics
@@ -18,7 +18,7 @@ License:     GPL-3.0+
 License URI: http://www.gnu.org/licenses/gpl-3.0.txt
 
 ------------------------------------------------------------------------
-Copyright 2022 Carmack Holdings, LLC.
+Copyright 2022-2024 Carmack Holdings, LLC.
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -36,6 +36,8 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 */
 
 namespace Alquemie\CDP;
+
+define( 'ALQUEMIE_CDP_VERSION', '2.3.0' );
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -74,17 +76,27 @@ function _is_in_development_mode() {
 	return $isDebug;
 }
 
+function _log($message) {
+	if (WP_DEBUG === true) {
+		if (is_array($message) || is_object($message)) {
+			error_log(print_r($message, true));
+		} else {
+			error_log($message);
+		}
+	} 
+}
+
 function activate_analytics() {
 	require_once _get_plugin_directory() . '/includes/class-analytics-activator.php';
 	Analytics_Activator::run();
 }
-register_activation_hook( __NAMESPACE__, 'activate_analytics' );
+register_activation_hook( __FILE__,  __NAMESPACE__ . '\activate_analytics' );
 
 function deactivate_analytics() {
 	require_once _get_plugin_directory() . '/includes/class-analytics-deactivator.php';
 	Analytics_Deactivator::run();
 }
-register_deactivation_hook( __NAMESPACE__, 'deactivate_analytics' );
+register_deactivation_hook( __FILE__,  __NAMESPACE__ . '\deactivate_analytics' );
 
 require_once _get_plugin_directory() . '/includes/class-cdp-analytics.php';
 
@@ -92,14 +104,13 @@ require_once _get_plugin_directory() . '/includes/class-cdp-analytics.php';
  * Begins execution of the plugin.
  */
 function launch() {
-	//$plugin_data = get_plugin_data( __FILE__ );
-	$plugin_data['Name'] = 'Alquemie_CDP_WP';
-	$plugin_data['Version'] = '2.1.1';
+	$plugin_data['Name'] = 'Alquemie CDP Analytics';
+	$plugin_data['Version'] = ALQUEMIE_CDP_VERSION;
 	
 	$plugin = new Analytics($plugin_data);
 	$plugin->run();
 
 	do_action( 'cdp_analytics_loaded' );
-
 }
+
 launch();

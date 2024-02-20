@@ -52,12 +52,23 @@ class Analytics_Admin {
 
 	}
 
+  public function add_json_upload_mimes( $types ) { 
+    $types['json'] = 'text/plain';
+    return $types;
+  }
+  
   public function settings_page() {
-
-
     // Control core classes for avoid errors
     if( class_exists( 'CSF' ) ) {
-
+      $time_options = [];
+      $schedules = wp_get_schedules();
+      usort($schedules, function ($item1, $item2) {
+        return $item1['interval'] <=> $item2['interval'];
+      });
+      foreach($schedules as $key => $value) {
+        $time_options[$key] = $value['display'];
+      }
+    
       //
       // Set a unique slug-like ID
       $prefix = 'segment_keys';
@@ -150,22 +161,58 @@ class Analytics_Admin {
             'title' => 'Source WriteKey',
           ),
           array(
+            'id'         => 'segment_enable_edgesdk',
+            'type'       => 'button_set',
+            'title'      => 'EdgeSDK Cloudflare Worker',
+            'options'    => array(
+              'enabled'  => 'Enabled',
+              'disabled' => 'Disabled',
+            ),
+            'default'    => 'disabled'
+          ),
+          array(
             'id'      => 'segment_region_setting',
             'type'    => 'radio',
             'title'   => 'Region',
             'options' => array(
               'us'   => 'Oregon (Default)',
               'eu2'    => 'Dublin',
+              'au1'    => 'Singapore',
+              'ap1'    => 'Sydney',
             ),
             'default' => 'us',
+            'dependency' => array( 'segment_enable_edgesdk', '==', 'disabled' ),
             'subtitle' => __( 'For more information on regional settings, visit the <a href="https://segment.com/docs/guides/regional-segment/" target="_blank">Segment Documentaion</a>.', 'cdp-analytics' ),
           ),
           array(
             'id'    => 'segment_custom_domain',
             'type'  => 'text',
             'title' => 'Custom Subdomain',
+            'before' => 'https://',
             'default' => "cdn.segment.com",
-            'subtitle' => __( 'Contact friends@segment to configure a custom subdomain for the Segment CDN.', 'cdp-analytics' )
+            'dependency' => array( 'segment_enable_edgesdk', '==', 'enabled' ),
+            'subtitle' => __( 'Visit <a href="https://github.com/segmentio/analytics-edge/" target="_new">Segment EdgeSDK</a> page for more information.', 'cdp-analytics' )
+          ),
+          array(
+            'id'    => 'segment_edgesdk_prefix',
+            'type'  => 'text',
+            'title' => 'EdgeSDK Prefix Value',
+            'default' => "magic",
+            'attributes'  => array(
+              'size' => 15,
+              'maxlength' => 15,
+            ),
+            'dependency' => array( 'segment_enable_edgesdk', '==', 'enabled' )
+          ),
+          array(
+            'id'    => 'segment_edgesdk_uuid',
+            'type'  => 'text',
+            'title' => 'EdgeSDK Random UUID',
+            'default' => array($this, 'generate_uuid'),
+            'attributes'  => array(
+              'readonly' => false,
+            ),
+            'dependency' => array( 'segment_enable_edgesdk', '==', 'enabled' )
           ),
           
 
@@ -201,6 +248,8 @@ class Analytics_Admin {
           ), */
         )
       ) );
+      
+      $googleSheetImg = '<img src="' . _get_plugin_url() . '/img/google-sheets-json-url.png" alt="Google Sheet JSON URL" width="450px" />';
 
       \CSF::createSection( $prefix, array(
         'title'  => 'Ad Campaigns',
@@ -253,6 +302,31 @@ class Analytics_Admin {
               ),
             ),
             'dependency' => array( 'cdp-campaign-context', '==', true ),
+          ),
+          array(
+            'id'         => 'cdp-campaign-normalize',
+            'type'       => 'switcher',
+            'title'      => 'Normalize Campaign Source',
+            'text_on'    => 'Yes',
+            'text_off'   => 'No',
+            'subtitle' => __( 'Compare UTM_SOURCE to a library and normalize the value to the mapped value.  If the value is not found the source is lower snake-cased to provide consistency.', 'cdp-analytics' ),
+            'default' => false
+          ),
+          array(
+            'id'        => 'cdp-normalize-settings',
+            'type'      => 'fieldset',
+            'title'     => 'UTM Normalization Settings',
+            'fields'    => array(
+              array(
+                'id'      => 'cdp-campaign-source-map',
+                'type'    => 'textarea',
+                'title'   => 'Source/Medium Values',
+                'default' => 'value,source,medium',
+                'subtitle' => '[query string value],[new value],[medium <em>*optional</em>]'
+              )
+            ),
+            'dependency' => array( 'cdp-campaign-normalize', '==', 'true' ),
+            'subtitle' => __( 'This comma separated list of values replaces utm_source values with the normalized value.', 'cdp-analytics' )
           ),
           array(
             'id'         => 'cdp-campaign-partners',
@@ -639,7 +713,7 @@ class Analytics_Admin {
     }
     
   }
-
+  
   public function help_function() {
     $all_options = get_option( 'segment_keys' );
     echo "<pre>" . print_r($all_options, true) . "</pre>";
@@ -647,16 +721,7 @@ class Analytics_Admin {
 
   public function snakecase_value( $value ) {
       if (is_array($value)) {
-        error_log(print_r($value, true));
-        /*
-        for ($i = 0; $i < count($value); $i++)  {
-          if (is_array($value[$i])) {
-            $value[$i] = $this->snakecase_value($value[$i]);
-          } else {
-            $value[$i] = strtolower(str_replace( ' ', '_', $value[$i] ));
-          }
-        }
-        */
+        _log(print_r($value, true));
         $value =  array_map( array( $this, 'snakecase_value'), $value );
         return ($value);
       } else {
@@ -688,6 +753,14 @@ class Analytics_Admin {
 
 	}
 
+  public function generate_uuid()
+  {
+      $b = random_bytes(16);
+      $b[6] = chr(ord($b[6]) & 0x0f | 0x40);
+      $b[8] = chr(ord($b[8]) & 0x3f | 0x80);
+      return vsprintf('%s%s-%s-%s-%s-%s%s%s', str_split(bin2hex($b), 4));
+  }
+
   public function writekey_missing_notice() { 
     $options = get_option( 'segment_keys' );
 		if ( ! isset( $options['segment_write_key'] ) || ($options['segment_write_key'] == "") ) {
@@ -699,6 +772,56 @@ class Analytics_Admin {
     }
   }
 
+  public function resetCronJob() {
+    _log("CDP JSON Refresh Job Reset");
+
+  }
+
+  public function  buildCampaignSourceMap() {
+    $options = get_option( 'segment_keys' );
+    $sheetId = trim($options['cdp-normalize-settings']['cdp-campaign-source-map']);
+
+    if ($options['cdp-campaign-normalize'] && $sheetId != '') {
+      $sheet = 'https://opensheet.elk.sh/' . $sheetId . '/UTM%20Mapping';
+      $fh = fopen($sheet,'r') or die($php_errormsg); 
+      while (! feof($fh)) { $page .= fread($fh,1048576); } fclose($fh); 
+      $page = json_decode($page);
+      
+      if (!isset($page->error)) {
+        $map = array();
+        foreach ($page as $value) {
+            $key = snakecase_value($value->{'Input Source'}, '-');
+            $map[$key] = $value->{'Mapped Source'};
+        }
+
+        $upload_dir = wp_upload_dir(); 
+		    $cdp_file = $upload_dir['basedir'] . '/' . 'cdp-analytics/sourcemap.json';
+
+        $jsonFile = fopen($cdp_file, "w") or _log("Unable to open CDP Map file!");
+        fwrite($jsonFile, json_encode($map));
+        fclose($jsonFile);
+
+        _log(json_encode($map));
+      }
+    }
+  }
+ 
+  public function cron_add_frequencies( $schedules ) {
+    $schedules['halfhour'] = array(
+      'interval' => 1800,
+      'display' => __( 'Every 30 Minutes' )
+    );
+      $schedules['fourhourly'] = array(
+      'interval' => 900,
+      'display' => __( 'Every 15 Minutes' )
+    );
+    $schedules['fourdaily'] = array(
+      'interval' => 6 * HOUR_IN_SECONDS,
+      'display' => __( 'Four Times Daily' )
+    );
+    return $schedules;
+  }
+  
 	/**
 	 * Register the JavaScript for the admin area.
 	 *

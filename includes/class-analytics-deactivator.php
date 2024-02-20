@@ -32,7 +32,13 @@ class Analytics_Deactivator {
 	 * @since    1.0.0
 	 */
 	public static function run() {
-
+		_log("DEACTIVATE CDP Analytics");
+		self::cancelCronJob();
 	}
 
+	public static function cancelCronJob() {
+		$timestamp = wp_next_scheduled( 'cdp_refesh_source_map' );
+		wp_unschedule_event( $timestamp, 'cdp_refesh_source_map' );
+		wp_clear_scheduled_hook( 'cdp_refesh_source_map' );
+	}
 }

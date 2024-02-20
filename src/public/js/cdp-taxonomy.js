@@ -1,8 +1,7 @@
 
-jQuery(document).ready(function($) {
+document.addEventListener("DOMContentLoaded", () => {	
 	
 	if ( (typeof analytics !== 'undefined') && (cdp_analytics.taxonomy_context == "1" ) ) {
-	
 		const ADDWPTAX = function({ payload, next, integrations }) {
 			if (payload.obj.type == "page") {
 				if (cdp_analytics.categories != "") payload.obj.properties.categories = cdp_analytics.categories;
