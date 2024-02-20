@@ -175,7 +175,7 @@ class cdpAlqCampaignTracker {
   }
 };
 
-document.addEventListener("DOMContentLoaded", () => {
+// document.addEventListener("DOMContentLoaded", () => {
   if ( (typeof analytics !== 'undefined') && (cdp_analytics.campaign_context == "1" ) ) {
 	
     var mw = new cdpAlqCampaignTracker(cdp_analytics, cdp_ad_keys );
@@ -256,4 +256,4 @@ document.addEventListener("DOMContentLoaded", () => {
 
     analytics.addSourceMiddleware(ALQUEHANCECAMP);
   }
-});
+// });
