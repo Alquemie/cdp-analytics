@@ -1,6 +1,6 @@
 {
   "name": "cdp-analytics",
-  "version": "1.0.0",
+  "version": "2.3.1",
   "description": "WordPress Plugin to implement Segment CDP",
   "main": "index.js",
   "repository": "https://github.com/alquemie/cdp-analytics",

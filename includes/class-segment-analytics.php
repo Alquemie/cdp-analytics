@@ -57,8 +57,14 @@ class analytics {
         if ( isset( $this->_settings['segment_region_setting'] ) ) {
             $region = $this->_settings['segment_region_setting'];
             switch ($region) {
-                case "eu1":
-                    $return = "events.eu1.segmentapis.com";
+                case "eu2":
+                    $return = "events.eu2.segmentapis.com";
+                    break;
+                case "au1":
+                    $return = "events.au1.segmentapis.com";
+                    break;
+                case "ap1":
+                    $return = "events.ap1.segmentapis.com";
                     break;
                 default:
                     $return = "api.segment.io";
