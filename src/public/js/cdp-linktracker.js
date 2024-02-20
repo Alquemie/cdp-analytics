@@ -118,7 +118,7 @@ class cdpAlqLinkTracker {
       }
 
       var parent = this;
-      jQuery("a").click( function() {
+      jQuery("a").on( "click", function() {
         let el = jQuery(this);
         let href = (typeof(el.attr('href')) != 'undefined' ) ? el.attr('href') : '';
         let isThisDomain = href.match(document.domain.split('.').reverse()[1] + '.' + document.domain.split('.').reverse()[0]);
