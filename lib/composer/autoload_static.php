@@ -7,7 +7,7 @@ namespace Composer\Autoload;
 class ComposerStaticInitab30dd02396bab4ef3a75171dd5e6a18
 {
     public static $files = array (
-        '45a16669595eb3c0a9e2994e57fc3188' => __DIR__ . '/..' . '/yahnis-elsts/plugin-update-checker/load-v5p3.php',
+        'd05ecc14ff93fd612a81ec7e8ab4c2c9' => __DIR__ . '/..' . '/yahnis-elsts/plugin-update-checker/load-v5p4.php',
     );
 
     public static $prefixLengthsPsr4 = array (
@@ -33,61 +33,7 @@ class ComposerStaticInitab30dd02396bab4ef3a75171dd5e6a18
     );
 
     public static $classMap = array (
-        'CSF' => __DIR__ . '/..' . '/qriouslad/codestar-framework/src/classes/setup.class.php',
-        'CSF_Abstract' => __DIR__ . '/..' . '/qriouslad/codestar-framework/src/classes/abstract.class.php',
-        'CSF_Field_accordion' => __DIR__ . '/..' . '/qriouslad/codestar-framework/src/fields/accordion/accordion.php',
-        'CSF_Field_background' => __DIR__ . '/..' . '/qriouslad/codestar-framework/src/fields/background/background.php',
-        'CSF_Field_backup' => __DIR__ . '/..' . '/qriouslad/codestar-framework/src/fields/backup/backup.php',
-        'CSF_Field_border' => __DIR__ . '/..' . '/qriouslad/codestar-framework/src/fields/border/border.php',
-        'CSF_Field_button_set' => __DIR__ . '/..' . '/qriouslad/codestar-framework/src/fields/button_set/button_set.php',
-        'CSF_Field_callback' => __DIR__ . '/..' . '/qriouslad/codestar-framework/src/fields/callback/callback.php',
-        'CSF_Field_checkbox' => __DIR__ . '/..' . '/qriouslad/codestar-framework/src/fields/checkbox/checkbox.php',
-        'CSF_Field_code_editor' => __DIR__ . '/..' . '/qriouslad/codestar-framework/src/fields/code_editor/code_editor.php',
-        'CSF_Field_color' => __DIR__ . '/..' . '/qriouslad/codestar-framework/src/fields/color/color.php',
-        'CSF_Field_color_group' => __DIR__ . '/..' . '/qriouslad/codestar-framework/src/fields/color_group/color_group.php',
-        'CSF_Field_content' => __DIR__ . '/..' . '/qriouslad/codestar-framework/src/fields/content/content.php',
-        'CSF_Field_date' => __DIR__ . '/..' . '/qriouslad/codestar-framework/src/fields/date/date.php',
-        'CSF_Field_datetime' => __DIR__ . '/..' . '/qriouslad/codestar-framework/src/fields/datetime/datetime.php',
-        'CSF_Field_dimensions' => __DIR__ . '/..' . '/qriouslad/codestar-framework/src/fields/dimensions/dimensions.php',
-        'CSF_Field_fieldset' => __DIR__ . '/..' . '/qriouslad/codestar-framework/src/fields/fieldset/fieldset.php',
-        'CSF_Field_gallery' => __DIR__ . '/..' . '/qriouslad/codestar-framework/src/fields/gallery/gallery.php',
-        'CSF_Field_group' => __DIR__ . '/..' . '/qriouslad/codestar-framework/src/fields/group/group.php',
-        'CSF_Field_heading' => __DIR__ . '/..' . '/qriouslad/codestar-framework/src/fields/heading/heading.php',
-        'CSF_Field_icon' => __DIR__ . '/..' . '/qriouslad/codestar-framework/src/fields/icon/icon.php',
-        'CSF_Field_image_select' => __DIR__ . '/..' . '/qriouslad/codestar-framework/src/fields/image_select/image_select.php',
-        'CSF_Field_link' => __DIR__ . '/..' . '/qriouslad/codestar-framework/src/fields/link/link.php',
-        'CSF_Field_link_color' => __DIR__ . '/..' . '/qriouslad/codestar-framework/src/fields/link_color/link_color.php',
-        'CSF_Field_map' => __DIR__ . '/..' . '/qriouslad/codestar-framework/src/fields/map/map.php',
-        'CSF_Field_media' => __DIR__ . '/..' . '/qriouslad/codestar-framework/src/fields/media/media.php',
-        'CSF_Field_notice' => __DIR__ . '/..' . '/qriouslad/codestar-framework/src/fields/notice/notice.php',
-        'CSF_Field_number' => __DIR__ . '/..' . '/qriouslad/codestar-framework/src/fields/number/number.php',
-        'CSF_Field_palette' => __DIR__ . '/..' . '/qriouslad/codestar-framework/src/fields/palette/palette.php',
-        'CSF_Field_radio' => __DIR__ . '/..' . '/qriouslad/codestar-framework/src/fields/radio/radio.php',
-        'CSF_Field_repeater' => __DIR__ . '/..' . '/qriouslad/codestar-framework/src/fields/repeater/repeater.php',
-        'CSF_Field_select' => __DIR__ . '/..' . '/qriouslad/codestar-framework/src/fields/select/select.php',
-        'CSF_Field_slider' => __DIR__ . '/..' . '/qriouslad/codestar-framework/src/fields/slider/slider.php',
-        'CSF_Field_sortable' => __DIR__ . '/..' . '/qriouslad/codestar-framework/src/fields/sortable/sortable.php',
-        'CSF_Field_sorter' => __DIR__ . '/..' . '/qriouslad/codestar-framework/src/fields/sorter/sorter.php',
-        'CSF_Field_spacing' => __DIR__ . '/..' . '/qriouslad/codestar-framework/src/fields/spacing/spacing.php',
-        'CSF_Field_spinner' => __DIR__ . '/..' . '/qriouslad/codestar-framework/src/fields/spinner/spinner.php',
-        'CSF_Field_subheading' => __DIR__ . '/..' . '/qriouslad/codestar-framework/src/fields/subheading/subheading.php',
-        'CSF_Field_submessage' => __DIR__ . '/..' . '/qriouslad/codestar-framework/src/fields/submessage/submessage.php',
-        'CSF_Field_switcher' => __DIR__ . '/..' . '/qriouslad/codestar-framework/src/fields/switcher/switcher.php',
-        'CSF_Field_tabbed' => __DIR__ . '/..' . '/qriouslad/codestar-framework/src/fields/tabbed/tabbed.php',
-        'CSF_Field_text' => __DIR__ . '/..' . '/qriouslad/codestar-framework/src/fields/text/text.php',
-        'CSF_Field_textarea' => __DIR__ . '/..' . '/qriouslad/codestar-framework/src/fields/textarea/textarea.php',
-        'CSF_Field_typography' => __DIR__ . '/..' . '/qriouslad/codestar-framework/src/fields/typography/typography.php',
-        'CSF_Field_upload' => __DIR__ . '/..' . '/qriouslad/codestar-framework/src/fields/upload/upload.php',
-        'CSF_Field_wp_editor' => __DIR__ . '/..' . '/qriouslad/codestar-framework/src/fields/wp_editor/wp_editor.php',
-        'CSF_Fields' => __DIR__ . '/..' . '/qriouslad/codestar-framework/src/classes/fields.class.php',
-        'CSF_Options' => __DIR__ . '/..' . '/qriouslad/codestar-framework/src/classes/admin-options.class.php',
-        'CSF_Setup' => __DIR__ . '/..' . '/qriouslad/codestar-framework/src/classes/setup.class.php',
-        'CSF_Walker_Nav_Menu_Edit' => __DIR__ . '/..' . '/qriouslad/codestar-framework/src/functions/walker.php',
-        'CSF_Welcome' => __DIR__ . '/..' . '/qriouslad/codestar-framework/src/views/welcome.php',
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
-        'WP_Customize_Control_CSF' => __DIR__ . '/..' . '/qriouslad/codestar-framework/src/functions/customize.php',
-        'WP_Customize_Panel_CSF' => __DIR__ . '/..' . '/qriouslad/codestar-framework/src/functions/customize.php',
-        'WP_Customize_Section_CSF' => __DIR__ . '/..' . '/qriouslad/codestar-framework/src/functions/customize.php',
     );
 
     public static function getInitializer(ClassLoader $loader)
