@@ -3,7 +3,7 @@
         'name' => 'alquemie/cdp-analytics',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => 'cdbda54bc438ee4e5d6de444940da813cb05c3ef',
+        'reference' => '57bfedfebe68fb1d2aa19f582deb60c5b0fcaac6',
         'type' => 'wordpress-plugin',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -13,7 +13,7 @@
         'alquemie/cdp-analytics' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => 'cdbda54bc438ee4e5d6de444940da813cb05c3ef',
+            'reference' => '57bfedfebe68fb1d2aa19f582deb60c5b0fcaac6',
             'type' => 'wordpress-plugin',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -31,7 +31,7 @@
         'roave/security-advisories' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => 'bb15a6dc9a8493ace041a6de2929eb63ba0809ef',
+            'reference' => '881e474a47f9a34cf1768eabe1c88932875c4874',
             'type' => 'metapackage',
             'install_path' => NULL,
             'aliases' => array(),
